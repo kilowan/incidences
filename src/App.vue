@@ -29,7 +29,7 @@
   <div class="cabecera">
     <p class="mensaje">Bienvenido {{user.name}} {{user.surname1}} {{user.surname2}}</p>
     <div class="Logo">
-      <a href="veremp.php?funcion=Logout">
+      <a @click="logOut()" href="./">
         <img class="cierra" src="./shutdown.png" alt="Cerrar sesión" />
       </a>
     </div>
@@ -118,6 +118,19 @@ export default {
           this.incidencesCount = new_array.length;
       }
     },
+    logOut:function()
+    {
+      this.page = 'Login';
+      this.module = 'Main';
+      this.form = {
+        username: undefined,
+        pass: undefined,
+      };
+      this.user = undefined;
+      this.message = "";
+      this.incidences = undefined;
+      this.incidencesCount = 0;
+    }
   },
   mounted:function()
   {
