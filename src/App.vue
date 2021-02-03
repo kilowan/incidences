@@ -34,14 +34,20 @@
       </a>
     </div>
     <div class="opciones">
-      <a v-if="user.permissions.includes('13')" class="link" href="veremp.php?funcion=Agregar_parte&id_emp={{user.id}}&dni={{user.dni}}">Crear parte</a>
+      <a @click="add()" v-if="user.permissions.includes('13')" class="link">Crear parte</a>
       <a v-if="incidencesCount >0" class="link" href="veremp.php?id_emp={{user.id}}&dni={{user.dni}}&funcion=Partes">Ver partes</a>
       <a v-if="user.permissions.includes('2')" class="link" href="veremp.php?funcion=Estadisticas&id_emp={{user.id}}&dni={{user.dni}}">Estadísticas</a> 
       <a v-if="user.permissions.includes('16')" class="link" href="veremp.php?funcion=Lista&id_emp={{user.id}}&dni={{user.dni}}">Lista empleados</a> 
       <a class="link" href="veremp.php?funcion=Datos_personales&id_emp={{user.id}}&dni={{user.dni}}">Datos personales</a>
     </div>
   </div>
-    <div class="cuerpo">'.$_SESSION['mensaje'].'</div>
+    <div v-if="check('Crear_parte')" class="cuerpo">
+      <make-incidence/>
+    </div>
+    <div v-else class="cuerpo">
+      <p>Not working</p>
+    </div>
+
     <div class="Pie">
       <p>Trabajo realizado por Jose Javier Valero Fuentes y Juan Francisco Navarro Ramiro para el curso de ASIR 2º X</p>
     </div>
@@ -50,16 +56,35 @@
 
 <script>
 import axios from 'axios';
+import makeIncidence from './components/makeIncidence.vue'
+//import Vue from "vue";
+//import VueRouter from 'vue-router'
+
+/*const routes = [
+  {
+    path: "menu/makeIncidence",
+    name: "makeIncidence",
+    component: makeIncidence
+  },
+];*/
+
+/*var router = new VueRouter({
+  mode: "history",
+  routes
+});*/
 
 export default {
   name: 'App',
   components: {
+    makeIncidence,
+    //Vue,
+    //VueRouter,
   },
   data:function()
   {
     return {
       page: 'Login',
-      module: 'Main',
+      mod: 'Main',
       form: {
         username: undefined,
         pass: undefined,
@@ -71,6 +96,10 @@ export default {
     }
   },
   methods: {
+    check: function(data)
+    {
+      return this.mod == data? true: false;
+    },
     onSubmit: function()
     {
       axios.get("http://localhost:8082/newMenu.php?funcion=checkCredentials&username="+ this.form.username+"&pass="+this.form.pass)
@@ -92,6 +121,11 @@ export default {
         });
         console.log(this.response.username);
       });
+    },
+    add:function()
+    {
+      //this.$route.go('addIncidence');
+      this.mod = 'Crear_parte';
     },
     showIncidences:function()
     {
@@ -121,7 +155,7 @@ export default {
     logOut:function()
     {
       this.page = 'Login';
-      this.module = 'Main';
+      this.mod = 'Main';
       this.form = {
         username: undefined,
         pass: undefined,
@@ -237,10 +271,11 @@ img.cierra
 	top: 1%;
 	text-align: center;
 	border: 2px solid black;
-    background-color: #d7dee3;
+  background-color: #d7dee3;
+  top: 10%;
 	left: 30%;
 	width: 40%;
-	position: relative;
+	position: absolute;
 }
 .mod_parte
 {
