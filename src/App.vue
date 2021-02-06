@@ -1,29 +1,5 @@
 <template>
-<div v-if="page == 'Login'" id="Login">
-  <!-- Login -->
-  <div class="body">
-		<div class="cabecera">
-			<div class="nombre">
-				<p>J&J.SA </p>
-			</div>
-			<div class="mensaje">
-				<p>Bienvenidos</p>
-			</div>
-      <b-form>
-				<div class="login">
-					<input name="username" type="text" id="username" v-model="form.username" placeholder="username" required />
-          <input name="password" type="text" id="password" v-model="form.pass" placeholder="password" required/>
-					<button @click="onSubmit()" v-if="form.username && form.pass" type="submit" variant="primary">LOGIN</button>
-				</div>
-			</b-form>
-		</div>
-		<div class="cuerpo">
-		</div>
-		<div class="Pie">
-			<p>Trabajo realizado por Jose Javier Valero Fuentes y Juan Francisco Navarro Ramiro para el curso de ASIR 2º X</p>
-		</div>
-  </div>
-</div>
+<login v-if="page == 'Login'" id="Login" @logedIn="logedIn($event)"></login>
 <!-- Menu -->
 <div v-if="page == 'Menu'" id="Menu">
   <div class="cabecera">
@@ -58,10 +34,11 @@
 </template>
 
 <script>
+import makeIncidence from './components/makeIncidence.vue';
 import axios from 'axios';
-import makeIncidence from './components/makeIncidence.vue'
 import userInfo from './components/userInfo.vue';
-//import Vue from "vue";
+import login from './components/Login.vue';
+//import Vue from 'vue';
 //import VueRouter from 'vue-router'
 
 /*const routes = [
@@ -80,6 +57,7 @@ import userInfo from './components/userInfo.vue';
 export default {
   name: 'App',
   components: {
+    login,
     makeIncidence,
     userInfo,
     //Vue,
@@ -90,12 +68,7 @@ export default {
     return {
       page: 'Login',
       mod: 'Main',
-      form: {
-        username: undefined,
-        pass: undefined,
-      },
       user: undefined,
-      message: "",
       incidences: undefined,
       incidencesCount: 0,
     }
@@ -105,33 +78,29 @@ export default {
     {
       return this.mod == data? true: false;
     },
-    onSubmit: function()
+    logedIn: function(data)
     {
-      axios.get("http://localhost:8082/newMenu.php?funcion=checkCredentials&username="+ this.form.username+"&pass="+this.form.pass)
-      .then( data => {
-        this.response = data.data;
-        axios.get("http://localhost:8082/newMenu.php?funcion=getEmployeeByUsername&username="+ this.form.username)
-        .then( data => {
-          this.user = data.data;
-          this.page = 'Menu';
-          axios.get("http://localhost:8082/newMenu.php?funcion=getAllincidences")
-          .then( data => {
-            this.incidences = data.data;
-              axios.get("http://localhost:8082/newMenu.php?funcion=getAllincidences")
-              .then( data => {
-                this.incidences = data.data;
-                this.showIncidences();
-              });
-          });
+      axios.get("http://localhost:8082/newMenu.php?funcion=getEmployeeByUsername&username="+ data.username)
+      .then( datas => {
+        this.user = datas.data;
+        this.page = 'Menu';
+        axios.get("http://localhost:8082/newMenu.php?funcion=getAllincidences")
+        .then( datas => {
+          this.incidences = datas.data;
+            axios.get("http://localhost:8082/newMenu.php?funcion=getAllincidences")
+            .then( datas => {
+              this.incidences = datas.data;
+              this.showIncidences();
+            });
         });
-        console.log(this.response.username);
       });
     },
     add:function(data)
     {
       this.mod = data;
+      //window.location.pathname += data + '/';
     },
-    showIncidences:function()
+    showIncidences: function()
     {
       let new_array = undefined;
       if(this.user.permissions.includes("7") && this.user.permissions.includes("8") && this.user.permissions.includes("9"))
@@ -154,6 +123,7 @@ export default {
               return (array.solver.id == this.user.id || (array.state == 1 || array.state == 2 || array.state == 3 || array.state == 4) || array.owner.id == this.user.id);
           });
           this.incidencesCount = new_array.length;
+          this.page = 'Menu';
       }
     },
     logOut:function()
@@ -165,7 +135,6 @@ export default {
         pass: undefined,
       };
       this.user = undefined;
-      this.message = "";
       this.incidences = undefined;
       this.incidencesCount = 0;
     }
