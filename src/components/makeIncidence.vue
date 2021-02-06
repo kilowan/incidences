@@ -34,23 +34,18 @@ export default {
   methods: {
     addIncidence: function()
     {
-      //axios.defaults.headers.referer = undefined;
-      //axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
-      //axios.defaults.baseURL = 'http://localhost:8080';
-      //axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8';
-      axios.post('http://localhost:8082/newMenu.php', {
-        funcion: 'addIncidence',
-        ownerId: this.user.id,
-        issueDesc: this.description,
-        pieces: [
-          this.getPiece(),
-        ]
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
+      axios({
+        method: 'post',
+        headers: [],
+        url: 'http://localhost:8082/newMenu.php',
+        data: {
+          funcion: 'addIncidence',
+          ownerId: this.user.id,
+          issueDesc: this.description,
+          pieces: [
+            this.getPiece(),
+          ]
+        }
       });
       axios.get("http://localhost:8082/newMenu.php?funcion=getPiecesList")
       .then( data => {
