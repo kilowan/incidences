@@ -34,15 +34,18 @@
       </a>
     </div>
     <div class="opciones">
-      <a @click="add()" v-if="user.permissions.includes('13')" class="link">Crear parte</a>
+      <a @click="add('Crear_parte')" v-if="user.permissions.includes('13')" class="link">Crear parte</a>
       <a v-if="incidencesCount >0" class="link" href="veremp.php?id_emp={{user.id}}&dni={{user.dni}}&funcion=Partes">Ver partes</a>
       <a v-if="user.permissions.includes('2')" class="link" href="veremp.php?funcion=Estadisticas&id_emp={{user.id}}&dni={{user.dni}}">Estadísticas</a> 
       <a v-if="user.permissions.includes('16')" class="link" href="veremp.php?funcion=Lista&id_emp={{user.id}}&dni={{user.dni}}">Lista empleados</a> 
-      <a class="link" href="veremp.php?funcion=Datos_personales&id_emp={{user.id}}&dni={{user.dni}}">Datos personales</a>
+      <a @click="add('user_info')" class="link" >Datos personales</a>
     </div>
   </div>
     <div v-if="check('Crear_parte')" class="cuerpo">
-      <make-incidence v-if="user" :user="user" @closeForm="mod='Main'"/>
+      <make-incidence v-if="user" :user="user" @closeForm="mod='Main'" class="mensaje"/>
+    </div>
+    <div v-else-if="check('user_info')" class="cuerpo">
+      <user-info  v-if="user" :user="user"/>
     </div>
     <div v-else class="cuerpo">
       <p>Not working</p>
@@ -57,6 +60,7 @@
 <script>
 import axios from 'axios';
 import makeIncidence from './components/makeIncidence.vue'
+import userInfo from './components/userInfo.vue';
 //import Vue from "vue";
 //import VueRouter from 'vue-router'
 
@@ -77,6 +81,7 @@ export default {
   name: 'App',
   components: {
     makeIncidence,
+    userInfo,
     //Vue,
     //VueRouter,
   },
@@ -122,10 +127,9 @@ export default {
         console.log(this.response.username);
       });
     },
-    add:function()
+    add:function(data)
     {
-      //this.$route.go('addIncidence');
-      this.mod = 'Crear_parte';
+      this.mod = data;
     },
     showIncidences:function()
     {
@@ -213,7 +217,7 @@ body
 	top: 5%;
 	width: 40%;
 	left: 30%;
-	position: absolute;
+	position: relative;
 }
 .Logo
 {
