@@ -42,7 +42,7 @@
     </div>
   </div>
     <div v-if="check('Crear_parte')" class="cuerpo">
-      <make-incidence v-if="user" :user="user"/>
+      <make-incidence v-if="user" :user="user" @closeForm="mod='Main'"/>
     </div>
     <div v-else class="cuerpo">
       <p>Not working</p>

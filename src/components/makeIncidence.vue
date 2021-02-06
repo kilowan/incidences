@@ -46,7 +46,10 @@ export default {
             this.getPiece(),
           ]
         }
-      });
+      })
+      .then(
+        this.$emit('closeForm')
+      );
     },
     checkForm: function()
     {
