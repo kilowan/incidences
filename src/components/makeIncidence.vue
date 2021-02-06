@@ -47,10 +47,6 @@ export default {
           ]
         }
       });
-      axios.get("http://localhost:8082/newMenu.php?funcion=getPiecesList")
-      .then( data => {
-        this.pieces = data.data;
-      });
     },
     checkForm: function()
     {
