@@ -1,66 +1,79 @@
 <template>
   <!-- MakeIncidence -->
-    <b-form class="crearP">
+    <b-form  class="crearP">
         <label>Descripción del problema:</label><br />
-        <textarea name="descripcion" rows="10" cols="40" required placeholder="resumen del fallo"></textarea><br />
+        <textarea v-model="description" name="descripcion" rows="10" cols="40" placeholder="resumen del fallo"></textarea><br />
         <p> ¿Que pieza crees que falla?:</p>
         <p> 
             <select v-model="selected" name="pieza" required>
-                <option value="--" selectted="selected">--</option>
-                <option value="nose">No lo se</option>
-                <option value="torre">La torre</option>
-                <option value="pantalla">El monitor o proyector</option>
-                <option value="raton">El raton</option>
-                <option value="teclado">El teclado</option>
-                <option value="impresora">La impresora</option>
+                <option v-for="piece in pieces" :key="piece.id" v-bind:value="piece.name">{{ piece.name }}</option>
             </select>
         </p>
-        <b-button @click="addIncidence()" name="Submit" type="submit">Crear parte</b-button>
+        <button :disabled="!checkForm()" @click="addIncidence()" name="Submit" type="submit">Crear parte</button>
     </b-form><br/>
 </template>
 
 <script>
 import axios from 'axios';
-//import Vue from "vue";
-//import VueRouter from 'vue-router'
-
-/*const routes = [
-  {
-    path: "/",
-    name: "home",
-    //component: Home
-  },
-];*/
-
-/*var router = new VueRouter({
-  mode: "history",
-  //routes
-});*/
 
 export default {
   name: 'makeincidence',
+  props: ['user'],
   components: {
-    //Vue,
-    //VueRouter,
   },
   data:function()
   {
     return {
       selected: undefined,
       pieces: [],
+      checked: false,
+      choosen: '--',
+      description: undefined,
     }
   },
   methods: {
     addIncidence: function()
     {
+      //axios.defaults.headers.referer = undefined;
+      //axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+      //axios.defaults.baseURL = 'http://localhost:8080';
+      //axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8';
+      axios.post('http://localhost:8082/newMenu.php', {
+        funcion: 'addIncidence',
+        ownerId: this.user.id,
+        issueDesc: this.description,
+        pieces: [
+          this.getPiece(),
+        ]
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
       axios.get("http://localhost:8082/newMenu.php?funcion=getPiecesList")
       .then( data => {
         this.pieces = data.data;
-        this.showIncidences();
       });
     },
+    checkForm: function()
+    {
+      return this.selected && this.description? true:false;
+    },
+    getPiece:function()
+    {
+      return this.pieces.filter(piece => {
+        return piece.name == this.selected;
+      })[0];
+    },
   },
-  mounted:function(){}
+  mounted(){
+    axios.get("http://localhost:8082/newMenu.php?funcion=getPiecesList")
+      .then( data => {
+        this.pieces = data.data;
+    });
+  }
 }
 </script>
 

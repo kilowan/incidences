@@ -42,7 +42,7 @@
     </div>
   </div>
     <div v-if="check('Crear_parte')" class="cuerpo">
-      <make-incidence/>
+      <make-incidence v-if="user" :user="user"/>
     </div>
     <div v-else class="cuerpo">
       <p>Not working</p>
