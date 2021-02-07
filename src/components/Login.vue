@@ -1,0 +1,61 @@
+<template>
+<div>
+  <!-- Login -->
+  <div class="body">
+		<div class="cabecera">
+			<div class="nombre">
+				<p>J&J.SA </p>
+			</div>
+			<div class="mensaje">
+				<p>Bienvenidos</p>
+			</div>
+      <b-form>
+				<div class="login">
+					<input name="username" type="text" id="username" v-model="form.username" placeholder="username" required />
+          <input name="password" type="password" id="password" v-model="form.pass" placeholder="password" required/>
+					<button @click="onSubmit()" v-if="form.username && form.pass" type="submit" variant="primary">LOGIN</button>
+				</div>
+			</b-form>
+		</div>
+		<div class="cuerpo">
+		</div>
+		<div class="Pie">
+			<p>Trabajo realizado por Jose Javier Valero Fuentes y Juan Francisco Navarro Ramiro para el curso de ASIR 2º X</p>
+		</div>
+  </div>
+</div>
+</template>
+
+<script>
+
+import axios from 'axios';
+
+export default {
+  name: 'Login',
+  components: {
+  },
+  data:function()
+  {
+    return {
+      form: {
+        username: undefined,
+        pass: undefined,
+      },
+      user: undefined,
+      incidences: undefined,
+    }
+  },
+  methods: {
+    onSubmit: function()
+    {
+      axios.get("http://localhost:8082/newMenu.php?funcion=checkCredentials&username="+ this.form.username+"&pass="+this.form.pass)
+      .then( data => {
+        this.response = data.data;
+        this.$emit('logedIn', data.data)
+      });
+    },
+  },
+  mounted(){}
+}
+</script>
+<style></style>
