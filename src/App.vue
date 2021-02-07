@@ -13,7 +13,7 @@
       <a href="#" @click="add('Crear_parte')" v-if="user.permissions.includes('13')" class="link">Crear parte</a>
       <a v-if="incidencesCount >0" class="link" href="veremp.php?id_emp={{user.id}}&dni={{user.dni}}&funcion=Partes">Ver partes</a>
       <a href="#" @click="add('statistics')" v-if="user.permissions.includes('2')" class="link" >Estadísticas</a> 
-      <a v-if="user.permissions.includes('16')" class="link" href="veremp.php?funcion=Lista&id_emp={{user.id}}&dni={{user.dni}}">Lista empleados</a> 
+      <a href="#" @click="add('employeeList')" v-if="user.permissions.includes('16')" class="link">Lista empleados</a>
       <a href="#" @click="add('user_info')" class="link" >Datos personales</a>
     </div>
   </div>
@@ -25,6 +25,9 @@
     </div>
     <div v-else-if="check('statistics')" class="cuerpo">
       <statistics  v-if="user" :user="user"/>
+    </div>
+    <div v-else-if="check('employeeList')" class="cuerpo">
+      <employee-list  v-if="user" :user="user"/>
     </div>
     <div v-else class="cuerpo">
       <p>Not working</p>
@@ -42,6 +45,7 @@ import axios from 'axios';
 import userInfo from './components/userInfo.vue';
 import login from './components/Login.vue';
 import statistics from './components/statistics.vue';
+import employeeList from './components/employeeList.vue';
 //import Vue from 'vue';
 //import VueRouter from 'vue-router'
 
@@ -65,6 +69,7 @@ export default {
     makeIncidence,
     userInfo,
     statistics,
+    employeeList,
     //Vue,
     //VueRouter,
   },
