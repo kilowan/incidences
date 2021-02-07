@@ -1,6 +1,6 @@
 <template>
   <!-- globalstatistics -->
-  <div id="globalStatistics">
+  <div v-if="globalStatistics && user.permissions.includes('17')" id="globalStatistics">
     <table>
         <tr>
             <th colspan="2">Estadisticas globales</th>
@@ -11,9 +11,9 @@
           <th>Tiempo medio</th>
           <th>Nombre de empleado</th>
       </tr>
-      <tr>
-          <td>prueba1</td>
-          <td>prueba2</td>
+      <tr v-for="(global, index) in globalStatistics" v-bind:key="index">
+          <td v-text="global.average"></td>
+          <td v-text="global.employeeName"></td>
       </tr>
     </table><br />
   </div>
@@ -70,29 +70,12 @@ export default {
       statistics: undefined,
     }
   },
-  methods: {
-    global: function()
-    {
-
-    },
-    reported: function()
-    {
-
-    },
-  },
+  methods: {},
   mounted(){
     if(this.user.permissions.includes('2'))
     {
-      /*axios.get("http://localhost:8082/newMenu.php?funcion=getStatistics&id="+ this.user.id)
-      .then( data => {
-        this.statistics = data.data;
-      });*/
       axios({
         method: 'get',
-        /*headers: {
-          'Access-Control-Allow-Origin': '*',
-        },*/
-        //headers: [],
         url: 'http://localhost:8082/newMenu.php?funcion=getStatistics&id='+ this.user.id,
       })
       .then(data =>
@@ -100,14 +83,17 @@ export default {
       );
       axios({
         method: 'get',
-        /*headers: {
-          'Access-Control-Allow-Origin': '*',
-        },*/
-        //headers: [],
         url: 'http://localhost:8082/newMenu.php?funcion=getReportedPieces',
       })
       .then(data =>
         this.pieces = data.data
+      );
+      axios({
+        method: 'get',
+        url: 'http://localhost:8082/newMenu.php?funcion=getGlobalStatistics',
+      })
+      .then(data =>
+        this.globalStatistics = data.data
       );
     }
   }
