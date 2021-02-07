@@ -34,7 +34,7 @@
   </table><br />
   </div>
   <!-- statistics -->
-  <div v-if="statistics" id="statistics">
+  <div v-if="statistics && checkStatistics()" id="statistics">
     <table>
       <tr>
           <th colspan="2">Estadisticas</th>
@@ -70,7 +70,12 @@ export default {
       statistics: undefined,
     }
   },
-  methods: {},
+  methods: {
+    checkStatistics: function()
+    {
+      return this.statistics.average? true: false;
+    },
+  },
   mounted(){
     if(this.user.permissions.includes('2'))
     {
