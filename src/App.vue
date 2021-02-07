@@ -10,11 +10,11 @@
       </a>
     </div>
     <div class="opciones">
-      <a @click="add('Crear_parte')" v-if="user.permissions.includes('13')" class="link">Crear parte</a>
+      <a href="#" @click="add('Crear_parte')" v-if="user.permissions.includes('13')" class="link">Crear parte</a>
       <a v-if="incidencesCount >0" class="link" href="veremp.php?id_emp={{user.id}}&dni={{user.dni}}&funcion=Partes">Ver partes</a>
       <a v-if="user.permissions.includes('2')" class="link" href="veremp.php?funcion=Estadisticas&id_emp={{user.id}}&dni={{user.dni}}">Estadísticas</a> 
       <a v-if="user.permissions.includes('16')" class="link" href="veremp.php?funcion=Lista&id_emp={{user.id}}&dni={{user.dni}}">Lista empleados</a> 
-      <a @click="add('user_info')" class="link" >Datos personales</a>
+      <a href="#" @click="add('user_info')" class="link" >Datos personales</a>
     </div>
   </div>
     <div v-if="check('Crear_parte')" class="cuerpo">
@@ -23,6 +23,9 @@
     <div v-else-if="check('user_info')" class="cuerpo">
       <user-info  v-if="user" :user="user"/>
     </div>
+    <!--<div v-else-if="check('user_info')" class="cuerpo">
+      <user-info  v-if="user" :user="user"/>
+    </div>-->
     <div v-else class="cuerpo">
       <p>Not working</p>
     </div>
