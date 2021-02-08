@@ -11,7 +11,7 @@
     </div>
     <div class="opciones">
       <a href="#" @click="add('Crear_parte')" v-if="user.permissions.includes('13')" class="link">Crear parte</a>
-      <a v-if="incidencesCount >0" class="link" href="veremp.php?id_emp={{user.id}}&dni={{user.dni}}&funcion=Partes">Ver partes</a>
+      <a href="#" @click="add('incidences')" v-if="incidencesCount >0" class="link">Ver partes</a>
       <a href="#" @click="add('statistics')" v-if="user.permissions.includes('2')" class="link" >Estadísticas</a> 
       <a href="#" @click="add('employeeList')" v-if="user.permissions.includes('16')" class="link">Lista empleados</a>
       <a href="#" @click="add('user_info')" class="link" >Datos personales</a>
@@ -28,6 +28,9 @@
     </div>
     <div v-else-if="check('employeeList')" class="cuerpo">
       <employee-list  v-if="user" :user="user"/>
+    </div>
+    <div v-else-if="check('incidences')" class="cuerpo">
+      <incidences  v-if="user" :user="user"/>
     </div>
     <div v-else class="cuerpo">
       <p>Not working</p>
@@ -46,6 +49,7 @@ import userInfo from './components/userInfo.vue';
 import login from './components/Login.vue';
 import statistics from './components/statistics.vue';
 import employeeList from './components/employeeList.vue';
+import incidences from './components/incidences.vue';
 //import Vue from 'vue';
 //import VueRouter from 'vue-router'
 
@@ -70,6 +74,7 @@ export default {
     userInfo,
     statistics,
     employeeList,
+    incidences,
     //Vue,
     //VueRouter,
   },
