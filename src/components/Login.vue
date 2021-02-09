@@ -4,15 +4,15 @@
   <div class="body">
 		<div class="cabecera">
 			<div class="nombre">
-				<p>J&J.SA </p>
+				<p class="brand">J&J.SA </p>
 			</div>
 			<div class="mensaje">
-				<p>Bienvenidos</p>
+				<p class="welcome">Bienvenidos</p>
 			</div>
       <b-form>
 				<div class="login">
-					<input name="username" type="text" id="username" v-model="form.username" placeholder="username" required />
-          <input name="password" type="password" id="password" v-model="form.pass" placeholder="password" required/>
+					<input class="input" name="username" type="text" id="username" v-model="form.username" placeholder="username" required />
+          <input class="input" name="password" type="password" id="password" v-model="form.pass" placeholder="password" required/>
 					<button @click="onSubmit()" v-if="form.username && form.pass" type="submit" variant="primary">LOGIN</button>
 				</div>
 			</b-form>

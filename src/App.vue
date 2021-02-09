@@ -216,10 +216,10 @@ img.cierra
 }
 .login
 {
-	font-size: 0.9em;
-	right: 1%;
-	top: 5%;
-	position: fixed;
+  font-size: 0.9em;
+  right: 1%;
+  top: 9%;
+  position: fixed;
 }
 .opciones
 {
@@ -233,6 +233,22 @@ img.cierra
 .link
 {
 	color: white;
+  padding-right: 6px;
+}
+.brand
+{
+  color: white;
+  text-align: left;
+}
+.input
+{
+  margin-right: 6px;
+}
+.welcome
+{
+  top: 2%;
+  left: 40%;
+  position: fixed;
 }
 .cuerpo
 {
