@@ -20,20 +20,15 @@
         </tr>
     </table><br />
     </div>
-    <div v-else-if="checkMenu('detail')">
-      <incidence-view v-if="incidenceData" :user="user" :incidence="incidenceData"/>
-    </div>
   </div>
 </template>
 
 <script>
-import incidenceView from './incidenceView.vue';
 
 export default {
   name: 'incidencesView',
   props: ['incidences', 'user', 'title'],
   components: {
-    incidenceView,
   },
   data:function()
   {
@@ -55,6 +50,7 @@ export default {
     {
       this.menu = 'detail';
       this.incidenceData = incidence;
+      this.$emit('linked', incidence);
     }
   },
   mounted(){}

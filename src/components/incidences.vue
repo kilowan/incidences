@@ -1,55 +1,68 @@
 <template>
   <!-- own incidences -->
-  <div v-if="checkPermissions(user.permissions, ['6', '7', '8', '9'])">
-    <!-- new -->
-    <incidences-view v-if="newOwnIncidences"
-    :incidences="newOwnIncidences"
-    :user="user"
-    :title="'Partes nuevos propios'"/>
+  <div v-if="!incidence">
+    <div v-if="checkPermissions(user.permissions, ['6', '7', '8', '9'])">
+      <!-- new -->
+      <incidences-view v-if="newOwnIncidences"
+      :incidences="newOwnIncidences"
+      :user="user"
+      :title="'Partes nuevos propios'"
+      @linked="linked($event)"/>
 
-    <!-- attended -->
-    <incidences-view v-if="attendedOwnIncidences"
-    :incidences="attendedOwnIncidences"
-    :user="user"
-    :title="'Partes atendidos propios'"/>
+      <!-- attended -->
+      <incidences-view v-if="attendedOwnIncidences"
+      :incidences="attendedOwnIncidences"
+      :user="user"
+      :title="'Partes atendidos propios'"
+      @linked="linked($event)"/>
 
-    <!-- closed -->
-    <incidences-view v-if="closedOwnIncidences"
-    :incidences="closedOwnIncidences"
-    :user="user"
-    :title="'Partes atendidos propios'"/>
+      <!-- closed -->
+      <incidences-view v-if="closedOwnIncidences"
+      :incidences="closedOwnIncidences"
+      :user="user"
+      :title="'Partes atendidos propios'"
+      @linked="linked($event)"/>
 
-    <!-- hidden -->
-    <incidences-view v-if="hiddenOwnIncidences"
-    :incidences="hiddenOwnIncidences"
-    :user="user"
-    :title="'Partes ocultos propios'"/>
+      <!-- hidden -->
+      <incidences-view v-if="hiddenOwnIncidences"
+      :incidences="hiddenOwnIncidences"
+      :user="user"
+      :title="'Partes ocultos propios'"
+      @linked="linked()"/>
+    </div>
+    <!-- other incidences -->
+    <div v-if="checkPermissions(user.permissions, ['10', '11', '12'])">
+      <!-- new -->
+      <incidences-view v-if="newIncidences"
+      :incidences="newIncidences"
+      :user="user"
+      :title="'Partes nuevos'"
+      @linked="linked($event)"/>
+
+      <!-- attended -->
+      <incidences-view v-if="attendedIncidences"
+      :incidences="attendedIncidences"
+      :user="user"
+      :title="'Partes atendidos'"
+      @linked="linked($event)"/>
+
+      <!-- closed -->
+      <incidences-view v-if="closedIncidences"
+      :incidences="closedIncidences"
+      :user="user"
+      :title="'Partes cerrados'"
+      @linked="linked($event)"/>
+    </div>
   </div>
-  <!-- other incidences -->
-  <div v-if="checkPermissions(user.permissions, ['10', '11', '12'])">
-    <!-- new -->
-    <incidences-view v-if="newIncidences"
-    :incidences="newIncidences"
-    :user="user"
-    :title="'Partes nuevos'"/>
-
-    <!-- attended -->
-    <incidences-view v-if="attendedIncidences"
-    :incidences="attendedIncidences"
-    :user="user"
-    :title="'Partes atendidos'"/>
-
-    <!-- closed -->
-    <incidences-view v-if="closedIncidences"
-    :incidences="closedIncidences"
-    :user="user"
-    :title="'Partes cerrados'"/>
+  <div v-else>
+    <incidence-view v-if="incidence" :user="user" :incidence="incidence"/>
   </div>
 </template>
 
 <script>
 
 import incidencesView from './incidencesView.vue';
+import incidenceView from './incidenceView.vue';
 import axios from 'axios';
 
 export default {
@@ -57,6 +70,7 @@ export default {
   props: ['user'],
   components: {
     incidencesView,
+    incidenceView
   },
   data:function()
   {
@@ -68,9 +82,14 @@ export default {
       closedIncidences: undefined,
       attendedIncidences: undefined,
       newIncidences: undefined,
+      incidence: undefined,
     }
   },
   methods: {
+    linked:function(incidence)
+    {
+      this.incidence = incidence;
+    },
     checkPermissions: function(permissions, permissionNumbers)
     {
       let result = true;
