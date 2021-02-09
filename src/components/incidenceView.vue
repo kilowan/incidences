@@ -1,0 +1,81 @@
+<template>
+  <!-- incidenceView -->
+  <br />
+  <table>
+    <tr>
+        <th>Ver Parte</th>
+    </tr>
+  </table><br />
+  <table>
+    <tr>
+      <td>Nº parte</td>
+      <td v-if="incidence.id">{{incidence.id}}</td>
+    </tr>
+    <tr>
+      <td>Empleado</td>
+      <td v-if="incidence.owner.id">{{incidence.owner.id}}</td>
+          </tr>
+          <tr>
+      <td>Información</td>
+      <td v-if="incidence.issueDesc">{{incidence.issueDesc}}</td>
+          </tr>
+    <tr>
+      <td>Tecnico a cargo</td>
+      <td v-if="incidence.solver.id">{{incidence.solver.id}}</td>
+    </tr>
+    <tr>
+      <td>Fecha de creación</td>
+      <td v-if="incidence.initDateTime">{{incidence.initDateTime}}</td>
+    </tr>
+    <tr v-if="incidence.state == 1 && user.permissions.includes('6') && incidence.owner.id == user.id">
+      <td>
+          <a href="veremp.php?id_part={{incidence.id}}&funcion=Borrar_parte">Borrar</a>
+      </td>
+      <td>
+          <a href="veremp.php?funcion=Editar_parte&id_emp={{user.id}}&dni={{user.dni}}&id_part={{incidence.id}}">Editar</a>
+      </td>'
+    </tr>
+    <tr v-else-if="incidence.state == 1 && (user.permissions.includes('3') || user.permissions.includes('10')) && incidence.owner.id != user.id">
+      <td colspan="2">
+          <a href="veremp.php?id_emp={{user.id}}&dni={{user.dni}}&id_part={{incidence.id}}&funcion=Atender_parte">Atender</a>
+      </td>
+    </tr>
+    <tr v-else-if="incidence.state == 2 && (user.permissions.includes('5') || user.permissions.includes('11')) && incidence.owner.id != user.id">
+      <td colspan="2">
+          <a href="veremp.php?funcion=Modificar_parte&id_emp={{user.id}}&dni={{user.dni}}&id_part={{incidence.id}}">Modificar</a>
+      </td>
+    </tr>
+    <tr v-else-if="incidence.state == 3 && user.permissions.includes('22')">
+      <td colspan="2">
+          <a href="veremp.php?id_part={{incidence.id}}&funcion=Ocultar_parte">Ocultar</a>
+      </td>
+    </tr>
+    <tr v-else-if="incidence.state == 4 && user.permissions.includes('9')">
+      <td colspan="2">
+          <a href="veremp.php?id_part={{incidence.id}}&funcion=Mostrar_parte">Mostrar</a>
+      </td>
+    </tr>
+      </table>'.getNotesView($incidence).$data;
+</template>
+
+<script>
+
+export default {
+  name: 'incidencesView',
+  props: ['incidence', 'user'],
+  components: {
+  },
+  data:function()
+  {
+    return {}
+  },
+  methods: {
+    check: function()
+    {
+      return Object.keys(this.incidences).length >0;
+    }
+  },
+  mounted(){}
+}
+</script>
+<style></style>

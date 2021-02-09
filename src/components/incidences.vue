@@ -3,39 +3,46 @@
   <div v-if="checkPermissions(user.permissions, ['6', '7', '8', '9'])">
     <!-- new -->
     <incidences-view v-if="newOwnIncidences"
-    :incidences="newOwnIncidences" 
+    :incidences="newOwnIncidences"
+    :user="user"
     :title="'Partes nuevos propios'"/>
 
     <!-- attended -->
     <incidences-view v-if="attendedOwnIncidences"
-    :incidences="attendedOwnIncidences" 
+    :incidences="attendedOwnIncidences"
+    :user="user"
     :title="'Partes atendidos propios'"/>
 
     <!-- closed -->
     <incidences-view v-if="closedOwnIncidences"
-    :incidences="closedOwnIncidences" 
+    :incidences="closedOwnIncidences"
+    :user="user"
     :title="'Partes atendidos propios'"/>
 
     <!-- hidden -->
     <incidences-view v-if="hiddenOwnIncidences"
-    :incidences="hiddenOwnIncidences" 
+    :incidences="hiddenOwnIncidences"
+    :user="user"
     :title="'Partes ocultos propios'"/>
   </div>
   <!-- other incidences -->
   <div v-if="checkPermissions(user.permissions, ['10', '11', '12'])">
     <!-- new -->
     <incidences-view v-if="newIncidences"
-    :incidences="newIncidences" 
+    :incidences="newIncidences"
+    :user="user"
     :title="'Partes nuevos'"/>
 
     <!-- attended -->
     <incidences-view v-if="attendedIncidences"
-    :incidences="attendedIncidences" 
+    :incidences="attendedIncidences"
+    :user="user"
     :title="'Partes atendidos'"/>
 
     <!-- closed -->
     <incidences-view v-if="closedIncidences"
-    :incidences="closedIncidences" 
+    :incidences="closedIncidences"
+    :user="user"
     :title="'Partes cerrados'"/>
   </div>
 </template>
