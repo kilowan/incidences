@@ -28,7 +28,7 @@
       :incidences="hiddenOwnIncidences"
       :user="user"
       :title="'Partes ocultos propios'"
-      @linked="linked()"/>
+      @linked="linked($event)"/>
     </div>
     <!-- other incidences -->
     <div v-if="checkPermissions(user.permissions, ['10', '11', '12'])">
