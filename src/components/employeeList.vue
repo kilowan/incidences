@@ -1,7 +1,7 @@
 <template>
   <!-- employeeList -->
   <div id="employeList" v-if="mod=='employeeList'">
-    <table>
+    <br /><table>
         <tr>
             <th>Lista de empleados</th>
         </tr>

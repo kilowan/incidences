@@ -1,6 +1,6 @@
 <template>
   <!-- globalstatistics -->
-  <div v-if="globalStatistics && user.permissions.includes('17')" id="globalStatistics">
+  <br /><div v-if="globalStatistics && user.permissions.includes('17')" id="globalStatistics">
     <table>
         <tr>
             <th colspan="2">Estadisticas globales</th>

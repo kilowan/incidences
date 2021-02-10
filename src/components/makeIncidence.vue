@@ -1,6 +1,6 @@
 <template>
   <!-- MakeIncidence -->
-    <b-form  class="crearP">
+    <br /><form  class="crearP">
         <label>Descripción del problema:</label><br />
         <textarea v-model="description" name="descripcion" rows="10" cols="40" placeholder="resumen del fallo"></textarea><br />
         <p> ¿Que pieza crees que falla?:</p>
@@ -10,7 +10,7 @@
             </select>
         </p>
         <button :disabled="!checkForm()" @click="addIncidence()" name="Submit" type="submit">Crear parte</button>
-    </b-form><br/>
+    </form><br/>
 </template>
 
 <script>
@@ -70,4 +70,14 @@ export default {
   }
 }
 </script>
-<style></style>
+<style>
+.crearP, .nuevoemp
+{
+	text-align: center;
+	border: 2px solid black;
+  background-color: #d7dee3;
+	left: 30%;
+	width: 40%;
+	position: absolute;
+}
+</style>

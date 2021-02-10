@@ -1,6 +1,6 @@
 <template>
   <!-- own incidences -->
-  <div v-if="!incidence">
+  <br /><div v-if="!incidence">
     <div v-if="checkPermissions(user.permissions, ['6', '7', '8', '9'])">
       <!-- new -->
       <incidences-view v-if="newOwnIncidences"

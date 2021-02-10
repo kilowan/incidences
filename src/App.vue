@@ -270,17 +270,6 @@ img.cierra
 	left: 30%;
 	width: 40%;
 }
-.crearP, .nuevoemp
-{
-	top: 1%;
-	text-align: center;
-	border: 2px solid black;
-  background-color: #d7dee3;
-  top: 10%;
-	left: 30%;
-	width: 40%;
-	position: absolute;
-}
 .mod_parte
 {
 	text-align: center;
@@ -295,7 +284,6 @@ table
 	box-shadow: 5px 5px 10px #999;
 	border: 1px solid white;
     background: white;
-	top: 1%;
 	left: 10%;
 	width: 80%;
 	position: relative;
