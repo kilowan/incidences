@@ -58,4 +58,17 @@ export default {
   mounted(){}
 }
 </script>
-<style></style>
+<style>
+.cabecera
+{
+	border: 2px solid black;
+  background-color: #333;
+	width: 100%;
+	height: 12%;
+	left: 0;
+	top: 0;
+	position: fixed;
+	color: white;
+	overflow: hidden;
+}
+</style>

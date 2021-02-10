@@ -180,18 +180,6 @@ body
 	font-size: 100%;
 	font-family: sans-serif;
 }
-.cabecera
-{
-	border: 2px solid black;
-  background-color: #333;
-	width: 100%;
-	height: 12%;
-	left: 0;
-	top: 0;
-	position: fixed;
-	color: white;
-	overflow: hidden;
-}
 .mensaje
 {
 	text-align: center;
@@ -209,10 +197,6 @@ body
 	right: 5%;
 	top: 10%;
 	position: absolute;
-}
-img.cierra
-{
-	width: 40px; height: 40px;
 }
 .login
 {
@@ -259,26 +243,6 @@ img.cierra
 	position: fixed;
 	overflow: auto;
 }
-.tabla_tecnico
-{
-	left: 10%;
-	width: 80%;
-	position: relative;
-}
-.tabla_ranking, .tabla_tiempo
-{
-	left: 30%;
-	width: 40%;
-}
-.mod_parte
-{
-	text-align: center;
-	border: 2px solid black;
-    background-color: #d7dee3;
-	width: 30%;
-	left: 35%;
-	position: absolute;
-}
 table
 {
 	box-shadow: 5px 5px 10px #999;
@@ -312,13 +276,5 @@ td
 	background-color: #333;
 	color: white;
 	text-align: center;
-}
-.respuesta
-{
-	text-align: center;
-	left: 35%;
-	width: 30%;
-	position: relative;
-	background: #d7dee3;
 }
 </style>
