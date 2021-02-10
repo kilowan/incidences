@@ -198,6 +198,10 @@ body
 	top: 10%;
 	position: absolute;
 }
+img.cierra
+{
+	width: 40px; height: 40px;
+}
 .login
 {
   font-size: 0.9em;
