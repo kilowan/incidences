@@ -47,18 +47,20 @@
     </tr>
     <tr v-else-if="incidence.state == 3 && user.permissions.includes('22')">
       <td colspan="2">
-          <a href="veremp.php?id_part={{incidence.id}}&funcion=Ocultar_parte">Ocultar</a>
+          <a href="#" @click="hide()">Ocultar</a>
       </td>
     </tr>
     <tr v-else-if="incidence.state == 4 && user.permissions.includes('9')">
       <td colspan="2">
-          <a href="veremp.php?id_part={{incidence.id}}&funcion=Mostrar_parte">Mostrar</a>
+          <a href="#" @click="show()">Mostrar</a>
       </td>
     </tr>
       </table>'.getNotesView($incidence).$data;
 </template>
 
 <script>
+
+import axios from 'axios';
 
 export default {
   name: 'incidencesView',
@@ -73,7 +75,27 @@ export default {
     check: function()
     {
       return Object.keys(this.incidences).length >0;
-    }
+    },
+    hide: function()
+    {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8082/newMenu.php?funcion=hideIncidence&incidenceId=' + this.incidence.id + '&userId=' + this.user.id,
+      }).then(data => {
+        this.$emit('reload', data);
+        //this.hiddenOwnIncidences = data.data;
+      });
+    },
+    show: function()
+    {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8082/newMenu.php?funcion=showIncidence&incidenceId=' + this.incidence.id + '&userId=' + this.user.id,
+      }).then(data => {
+        this.$emit('reload', data);
+        //this.hiddenOwnIncidences = data.data;
+      });
+    },
   },
   mounted(){}
 }

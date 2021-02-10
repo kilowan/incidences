@@ -55,7 +55,12 @@
     </div>
   </div>
   <div v-else>
-    <incidence-view v-if="incidence" :user="user" :incidence="incidence"/>
+    <incidence-view 
+      v-if="incidence" 
+      :user="user" 
+      :incidence="incidence"
+      @reload="handle()"
+      />
   </div>
 </template>
 
@@ -100,8 +105,9 @@ export default {
       });
       return result;
     },
-  },
-  mounted(){
+  handle: function()
+  {
+    this.incidence = undefined;
     if (this.checkPermissions(this.user.permissions, ['6', '7', '8', '9'])) {
       axios({
         method: 'get',
@@ -148,6 +154,11 @@ export default {
         this.closedIncidences = data.data;
       });
     }
+  },
+
+  },
+  mounted(){
+    this.handle();
   }
 }
 </script>
