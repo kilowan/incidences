@@ -55,7 +55,22 @@
           <a href="#" @click="show()">Mostrar</a>
       </td>
     </tr>
-      </table>'.getNotesView($incidence).$data;
+  </table><br />
+  <table>
+    <tr>
+        <th colspan="2">Notas del ténico</th>
+    </tr>
+  </table><br />
+  <table>
+    <tr>
+        <th>Nota</th>
+        <th>Fecha</th>
+    </tr>
+    <tr v-for="(note, index) in incidence.notes" v-bind:key="index">
+        <td>{{note.noteStr}}</td>
+        <td>{{note.date}}</td>
+    </tr>
+  </table><br />
 </template>
 
 <script>
