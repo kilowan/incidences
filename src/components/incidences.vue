@@ -31,7 +31,7 @@
       @linked="linked($event)"/>
     </div>
     <!-- other incidences -->
-    <div v-if="checkPermissions(user.permissions, ['10', '11', '12'])">
+    <div v-if="checkPermissions(user.permissions, ['10', '11', '12']) || checkPermissions(user.permissions, ['3', '4', '5'])">
       <!-- new -->
       <incidences-view v-if="newIncidences"
       :incidences="newIncidences"
@@ -128,7 +128,7 @@ export default {
         this.hiddenOwnIncidences = data.data;
       });
     }
-    if (this.checkPermissions(this.user.permissions, ['10', '11', '12'])) {
+    if (this.checkPermissions(this.user.permissions, ['10', '11', '12']) || this.checkPermissions(this.user.permissions, ['3', '4', '5'])) {
       axios({
         method: 'get',
         url: 'http://localhost:8082/newMenu.php?funcion=getNewIncidences&dni=' + this.user.dni,
