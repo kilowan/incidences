@@ -30,7 +30,7 @@
       </tr>
       <tr v-if="incidence.state == 1 && user.permissions.includes('6') && incidence.owner.id == user.id">
         <td>
-            <a href="veremp.php?id_part={{incidence.id}}&funcion=Borrar_parte">Borrar</a>
+            <a href="#" @click="deleteIncidence()">Borrar</a>
         </td>
         <td>
             <a href="#" @click="editIncidence()">Editar</a>
@@ -129,6 +129,15 @@ export default {
     editIncidence: function()
     {
       this.edit = true;
+    },
+    deleteIncidence: function()
+    {
+      axios({
+          method: 'get',
+          url: 'http://localhost:8082/newMenu.php?funcion=deleteIncidence&incidenceId=' + this.incidence.id + '&userId=' + this.user.id,
+        }).then(
+          this.$emit('reload')
+        );
     },
     reload:function()
     {
