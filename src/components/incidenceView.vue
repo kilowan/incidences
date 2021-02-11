@@ -33,7 +33,7 @@
       </td>
       <td>
           <a href="veremp.php?funcion=Editar_parte&id_emp={{user.id}}&dni={{user.dni}}&id_part={{incidence.id}}">Editar</a>
-      </td>'
+      </td>
     </tr>
     <tr v-else-if="incidence.state == 1 && (user.permissions.includes('3') || user.permissions.includes('10')) && incidence.owner.id != user.id">
       <td colspan="2">
@@ -56,6 +56,7 @@
       </td>
     </tr>
   </table><br />
+  <div v-if="incidence.notes">
   <table>
     <tr>
         <th colspan="2">Notas del ténico</th>
@@ -71,6 +72,7 @@
         <td>{{note.date}}</td>
     </tr>
   </table><br />
+  </div>
 </template>
 
 <script>
