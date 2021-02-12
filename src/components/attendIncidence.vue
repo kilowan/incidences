@@ -56,7 +56,7 @@
           <td>Piezas afectadas:</td>
           <td>
               <select v-model="selectedPiece" name="pieza">
-                <option value="--" selectted="selected">--</option>
+                <option value="--" selected="selected">--</option>
                 <option v-for="(piece, index) in piecesList" v-bind:key="index"/>
               </select>
           </td>
@@ -79,7 +79,7 @@
               <a href="#" @click="updateIncidence()">Guardar</a>
           </td>
       </tr>
-  </table>';
+  </table>
 </template>
 
 <script>
