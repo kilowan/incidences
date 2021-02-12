@@ -1,7 +1,7 @@
 <template>
   <!-- incidenceView -->
   <br />
-  <div v-if="!edit">
+  <div v-if="menu=='main'">
     <table>
       <tr>
           <th>Ver Parte</th>
@@ -11,22 +11,27 @@
       <tr>
         <td>Nº parte</td>
         <td v-if="incidence.id">{{incidence.id}}</td>
+        <td v-else>--</td>
       </tr>
       <tr>
         <td>Empleado</td>
         <td v-if="incidence.owner.id">{{incidence.owner.id}}</td>
-            </tr>
-            <tr>
+        <td v-else>--</td>
+      </tr>
+      <tr>
         <td>Información</td>
         <td v-if="incidence.issueDesc">{{incidence.issueDesc}}</td>
-            </tr>
+        <td v-else>--</td>
+      </tr>
       <tr>
         <td>Tecnico a cargo</td>
         <td v-if="incidence.solver.id">{{incidence.solver.id}}</td>
+        <td v-else>--</td>
       </tr>
       <tr>
         <td>Fecha de creación</td>
         <td v-if="incidence.initDateTime">{{incidence.initDateTime}}</td>
+        <td v-else>--</td>
       </tr>
       <tr v-if="incidence.state == 1 && user.permissions.includes('6') && incidence.owner.id == user.id">
         <td>
@@ -58,26 +63,34 @@
       </tr>
     </table><br />
     <div v-if="incidence.notes">
-    <table>
-      <tr>
-          <th colspan="2">Notas del ténico</th>
-      </tr>
-    </table><br />
-    <table>
-      <tr>
-          <th>Nota</th>
-          <th>Fecha</th>
-      </tr>
-      <tr v-for="(note, index) in incidence.notes" v-bind:key="index">
-          <td>{{note.noteStr}}</td>
-          <td>{{note.date}}</td>
-      </tr>
-    </table><br />
+      <table>
+        <tr>
+            <th colspan="2">Notas del ténico</th>
+        </tr>
+      </table><br />
+      <table>
+        <tr>
+            <th>Nota</th>
+            <th>Fecha</th>
+        </tr>
+        <tr v-for="(note, index) in incidence.notes" v-bind:key="index">
+            <td>{{note.noteStr}}</td>
+            <td>{{note.date}}</td>
+        </tr>
+      </table><br />
     </div>
+    <a href="#" @click="back()" class="link">Atrás</a>
   </div>
-  <div v-else>
+  <div v-else-if="menu=='edit'">
     <edit-incidence
     :user="user"
+    :incidence="incidence"
+    @reload="reload()"
+    @reloadoff="reloadoff()"/>
+  </div>
+  <div v-else>
+    <attend-incidence 
+    :user="user" 
     :incidence="incidence"
     @reload="reload()"
     @reloadoff="reloadoff()"/>
@@ -88,20 +101,26 @@
 
 import axios from 'axios';
 import editIncidence from './editIncidence.vue';
+import attendIncidence from './attendIncidence.vue';
 
 export default {
   name: 'incidencesView',
   props: ['incidence', 'user'],
   components: {
     editIncidence,
+    attendIncidence,
   },
   data:function()
   {
     return {
-      edit: false,
+      menu: 'main',
     }
   },
   methods: {
+    back: function()
+    {
+      this.$emit('stepBack');
+    },
     check: function()
     {
       return Object.keys(this.incidences).length >0;
@@ -128,7 +147,11 @@ export default {
     },
     editIncidence: function()
     {
-      this.edit = true;
+      this.menu = 'edit';
+    },
+    attendIncidence: function()
+    {
+      this.menu = 'attend';
     },
     deleteIncidence: function()
     {
@@ -141,12 +164,12 @@ export default {
     },
     reload:function()
     {
-      this.edit=false;
+      this.manu='main';
       this.$emit('reload');
     },
     reloadoff:function()
     {
-      this.edit=false;
+      this.manu='main';
     }
   },
   mounted(){}
