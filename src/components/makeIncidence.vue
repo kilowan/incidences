@@ -36,7 +36,6 @@ export default {
     {
       axios({
         method: 'post',
-        headers: [],
         url: 'http://localhost:8082/newMenu.php',
         data: {
           funcion: 'addIncidence',
@@ -45,7 +44,8 @@ export default {
           pieces: [
             this.getPiece(),
           ]
-        }
+        },
+      headers:[]
       })
       .then(
         this.$emit('closeForm')
