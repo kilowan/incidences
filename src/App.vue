@@ -30,7 +30,11 @@
       <employee-list  v-if="user" :user="user"/>
     </div>
     <div v-else-if="check('incidences')" class="cuerpo">
-      <incidences  v-if="user" :user="user"/>
+      <incidences 
+      v-if="user" 
+      :user="user" 
+      :incidences="incidences"
+      />
     </div>
     <div v-else class="cuerpo">
       <p>Not working</p>

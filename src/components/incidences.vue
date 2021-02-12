@@ -59,7 +59,8 @@
       v-if="incidence" 
       :user="user" 
       :incidence="incidence"
-      @reload="handle()"
+      @reload="reload()"
+      @stepBack="back()"
       />
   </div>
 </template>
@@ -68,11 +69,10 @@
 
 import incidencesView from './incidencesView.vue';
 import incidenceView from './incidenceView.vue';
-import axios from 'axios';
 
 export default {
   name: 'incidences',
-  props: ['user'],
+  props: ['user', 'incidences'],
   components: {
     incidencesView,
     incidenceView
@@ -105,57 +105,44 @@ export default {
       });
       return result;
     },
-  handle: function()
-  {
-    this.incidence = undefined;
-    if (this.checkPermissions(this.user.permissions, ['6', '7', '8', '9'])) {
-      axios({
-        method: 'get',
-        url: 'http://localhost:8082/newMenu.php?funcion=getOwnNewIncidences&dni=' + this.user.dni,
-      }).then(data => {
-        this.newOwnIncidences = data.data;
-      });
-      axios({
-        method: 'get',
-        url: 'http://localhost:8082/newMenu.php?funcion=getOwnIncidences&dni=' + this.user.dni,
-      }).then(data => {
-        this.attendedOwnIncidences = data.data;
-      });
-      axios({
-        method: 'get',
-        url: 'http://localhost:8082/newMenu.php?funcion=getOwnOldIncidences&dni=' + this.user.dni,
-      }).then(data => {
-        this.closedOwnIncidences = data.data;
-      });
-      axios({
-        method: 'get',
-        url: 'http://localhost:8082/newMenu.php?funcion=getOwnHiddenIncidences&dni=' + this.user.dni,
-      }).then(data => {
-        this.hiddenOwnIncidences = data.data;
-      });
-    }
-    if (this.checkPermissions(this.user.permissions, ['10', '11', '12']) || this.checkPermissions(this.user.permissions, ['3', '4', '5'])) {
-      axios({
-        method: 'get',
-        url: 'http://localhost:8082/newMenu.php?funcion=getNewIncidences&dni=' + this.user.dni,
-      }).then(data => {
-        this.newIncidences = data.data;
-      });
-      axios({
-        method: 'get',
-        url: 'http://localhost:8082/newMenu.php?funcion=getOtherIncidences&dni=' + this.user.dni,
-      }).then(data => {
-        this.attendedIncidences = data.data;
-      });
-      axios({
-        method: 'get',
-        url: 'http://localhost:8082/newMenu.php?funcion=getOtherOldIncidences&dni=' + this.user.dni,
-      }).then(data => {
-        this.closedIncidences = data.data;
-      });
-    }
-  },
-
+    reload: function()
+    {
+      this.incidence = undefined;
+      this.$emit('reload');
+    },
+    back: function()
+    {
+      this.incidence = undefined;
+    },
+    handle: function()
+    {
+      this.incidence = undefined;
+      if (this.checkPermissions(this.user.permissions, ['6', '7', '8', '9'])) {
+        this.newOwnIncidences = this.incidences.filter(data => {
+          return data.owner.dni == this.user.dni && data.state == 1;
+        });
+        this.attendedOwnIncidences = this.incidences.filter(data => {
+          return data.owner.dni == this.user.dni && data.state == 2;
+        });
+        this.closedOwnIncidences = this.incidences.filter(data => {
+          return data.owner.dni == this.user.dni && data.state == 3;
+        });
+        this.hiddenOwnIncidences = this.incidences.filter(data => {
+          return data.owner.dni == this.user.dni && data.state == 4;
+        });
+      }
+      if (this.checkPermissions(this.user.permissions, ['10', '11', '12']) || this.checkPermissions(this.user.permissions, ['3', '4', '5'])) {
+        this.newIncidences = this.incidences.filter(data => {
+          return data.state == 1;
+        });
+        this.attendedIncidences = this.incidences.filter(data => {
+          return data.solver.dni == this.user.dni && data.state == 2;
+        });
+        this.closedIncidences = this.incidences.filter(data => {
+          return data.solver.dni == this.user.dni && data.state == 3;
+        });
+      }
+    },
   },
   mounted(){
     this.handle();
