@@ -11,7 +11,7 @@
     </div>
     <div class="opciones">
       <a href="#" @click="add('Crear_parte')" v-if="user.permissions.includes('13')" class="link">Crear parte</a>
-      <a v-if="incidencesCount >0" class="link" href="veremp.php?id_emp={{user.id}}&dni={{user.dni}}&funcion=Partes">Ver partes</a>
+      <a href="#" @click="add('incidences')" v-if="incidencesCount >0" class="link">Ver partes</a>
       <a href="#" @click="add('statistics')" v-if="user.permissions.includes('2')" class="link" >Estadísticas</a> 
       <a href="#" @click="add('employeeList')" v-if="user.permissions.includes('16')" class="link">Lista empleados</a>
       <a href="#" @click="add('user_info')" class="link" >Datos personales</a>
@@ -27,7 +27,14 @@
       <statistics  v-if="user" :user="user"/>
     </div>
     <div v-else-if="check('employeeList')" class="cuerpo">
-      <employee-list  v-if="user" :user="user"/>
+      <employee-list  v-if="user" :user="user" :incidences="incidences"/>
+    </div>
+    <div v-else-if="check('incidences')" class="cuerpo">
+      <incidences 
+      v-if="user" 
+      :user="user" 
+      :incidences="incidences"
+      />
     </div>
     <div v-else class="cuerpo">
       <p>Not working</p>
@@ -46,6 +53,7 @@ import userInfo from './components/userInfo.vue';
 import login from './components/Login.vue';
 import statistics from './components/statistics.vue';
 import employeeList from './components/employeeList.vue';
+import incidences from './components/incidences.vue';
 //import Vue from 'vue';
 //import VueRouter from 'vue-router'
 
@@ -70,6 +78,7 @@ export default {
     userInfo,
     statistics,
     employeeList,
+    incidences,
     //Vue,
     //VueRouter,
   },
@@ -116,7 +125,7 @@ export default {
       if(this.user.permissions.includes("7") && this.user.permissions.includes("8") && this.user.permissions.includes("9"))
       {
           new_array = this.incidences.filter(array => {
-              return (array.owner.id == this.user.id);
+              return (array.owner.id == this.user.id && array.state != 5);
           });
           this.incidencesCount = new_array.length;
       }
@@ -175,18 +184,6 @@ body
 	font-size: 100%;
 	font-family: sans-serif;
 }
-.cabecera
-{
-	border: 2px solid black;
-  background-color: #333;
-	width: 100%;
-	height: 12%;
-	left: 0;
-	top: 0;
-	position: fixed;
-	color: white;
-	overflow: hidden;
-}
 .mensaje
 {
 	text-align: center;
@@ -211,10 +208,10 @@ img.cierra
 }
 .login
 {
-	font-size: 0.9em;
-	right: 1%;
-	top: 5%;
-	position: fixed;
+  font-size: 0.9em;
+  right: 1%;
+  top: 9%;
+  position: fixed;
 }
 .opciones
 {
@@ -228,6 +225,22 @@ img.cierra
 .link
 {
 	color: white;
+  padding-right: 6px;
+}
+.brand
+{
+  color: white;
+  text-align: left;
+}
+.input
+{
+  margin-right: 6px;
+}
+.welcome
+{
+  top: 2%;
+  left: 40%;
+  position: fixed;
 }
 .cuerpo
 {
@@ -238,43 +251,11 @@ img.cierra
 	position: fixed;
 	overflow: auto;
 }
-.tabla_tecnico
-{
-	left: 10%;
-	width: 80%;
-	position: relative;
-}
-.tabla_ranking, .tabla_tiempo
-{
-	left: 30%;
-	width: 40%;
-}
-.crearP, .nuevoemp
-{
-	top: 1%;
-	text-align: center;
-	border: 2px solid black;
-  background-color: #d7dee3;
-  top: 10%;
-	left: 30%;
-	width: 40%;
-	position: absolute;
-}
-.mod_parte
-{
-	text-align: center;
-	border: 2px solid black;
-    background-color: #d7dee3;
-	width: 30%;
-	left: 35%;
-	position: absolute;
-}
 table
 {
 	box-shadow: 5px 5px 10px #999;
 	border: 1px solid white;
     background: white;
-	top: 1%;
 	left: 10%;
 	width: 80%;
 	position: relative;
@@ -303,13 +284,5 @@ td
 	background-color: #333;
 	color: white;
 	text-align: center;
-}
-.respuesta
-{
-	text-align: center;
-	left: 35%;
-	width: 30%;
-	position: relative;
-	background: #d7dee3;
 }
 </style>
