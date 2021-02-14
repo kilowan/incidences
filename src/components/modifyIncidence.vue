@@ -2,8 +2,13 @@
   <!-- modifyIncidence -->
     <table>
       <tr>
+        <th colspan="2">Datos del parte</th>
+      </tr>
+    </table><br />
+    <table>
+      <tr>
         <td>Nombre del empleado</td>
-        <td v-if="incidence.owner">{{incidence.owner.name}} {{incidence.owner.surname1}} {{$incidence.owner.surname2}}</td>
+        <td v-if="incidence">{{incidence.owner.name}} {{incidence.owner.surname1}} {{incidence.owner.surname2}}</td>
         <td v-else>--</td>
       </tr>
       <tr>
@@ -34,7 +39,7 @@
       </tr>
       <tr v-for="(note, index) in incidence.notes" v-bind:key="index">
         <td>{{note.noteStr}}</td>
-        <td>{{$note.date}}</td>
+        <td>{{note.date}}</td>
       </tr>
     </table>
     <table>
@@ -84,7 +89,7 @@
 </template>
     
 <script>
-  //import axios from 'axios';
+  import axios from 'axios';
 
   export default {
     name: 'modifyIncidence',
@@ -95,6 +100,7 @@
     {
       return {
         //issueDesc: undefined,
+        pieces: undefined,
         selected: undefined,
         selectedPiece: undefined,
         technicianNote: undefined,
@@ -125,6 +131,10 @@
     },
     mounted(){
       //this.issueDesc = this.incidence.issueDesc;
+      axios.get("http://localhost:8082/newMenu.php?funcion=getPiecesList")
+      .then( data => {
+        this.pieces = data.data;
+    });
     }
   }
 </script>

@@ -8,7 +8,7 @@
   <table>
       <tr>
           <td>Nombre del empleado</td>
-          <td>{{incidence.owner.name}} {{incidence.owner.surname1}} {{$incidence.owner.surname2}}</td>
+          <td>{{incidence.owner.name}} {{incidence.owner.surname1}} {{incidence.owner.surname2}}</td>
       </tr>
       <tr>
           <td>Información</td>
@@ -23,44 +23,55 @@
           <td>{{incidence.initDateTime}}</td>
       </tr>
   </table><br />
+  <div v-if="incidence.notes">
+    <table>
+        <tr>
+            <th colspan="2">Notas del ténico</th>
+        </tr>
+    </table><br />
+    <table>
+        <tr>
+            <th>Nota</th>
+            <th>Fecha</th>
+        </tr>
+            <tr v-for="(note, index) in incidence.notes" v-bind:key="index">
+                <td>{{note.noteStr}}</td>
+                <td>{{note.date}}</td>
+            </tr>
+    </table><br />
+  </div>
   <table>
-      <tr>
-          <th colspan="2">Notas del ténico</th>
+      <tr v-if="pieces">
+        <th>Lista de piezas:</th>
       </tr>
-  </table><br />
-  <table>
-      <tr>
-          <th>Nota</th>
-          <th>Fecha</th>
-      </tr>
-          <tr v-for="(note, index) in incidence.notes" v-bind:key="index">
-              <td>{{note.noteStr}}</td>
-              <td>{{note.date}}</td>
-          </tr>
-  </table><br />
-  <table>
-    <tr>
-        <th>Piezas afectadas</th>
-    </tr>
-    <tr v-for="(piece, index) in incidence.pieces" v-bind:key="index">
-        <td>Nombre</td>
-        <td v-if="piece.name">{{piece.name}}</td>
-    </tr>
-    <tr>
-        <td>Descripcion</td>
-        <td v-if="piece.description">{{piece.description}}</td>
-    </tr>
   </table>
   <table>
       <tr>
-          <td>Piezas afectadas:</td>
-          <td>
-              <select v-model="selectedPiece" name="pieza">
-                <option value="--" selected="selected">--</option>
-                <option v-for="(piece, index) in piecesList" v-bind:key="index"/>
-              </select>
-          </td>
+        <td>
+            <select v-model="selectedPiece" name="pieza">
+              <option value="--" selected="true">--</option>
+              <option v-for="(piece, index) in pieces" v-bind:key="index">{{ piece.name }}</option>
+            </select>
+        </td>
+        <td><button @click="addPiece()">Añadir</button></td>
       </tr>
+  </table><br />
+  <table v-if="selectedPieces.length>0">
+    <tr>
+      <th>Piezas seleccionas:</th>
+    </tr>
+  </table>
+  <table>
+    <tr v-for="(selectedPiece, index) in selectedPieces" v-bind:key="index">
+      <td v-text="selectedPiece"/>
+    </tr>
+  </table><br />
+  <table>
+    <tr>
+      <th>Nota</th>
+    </tr>
+  </table>
+  <table>
       <tr>
           <td>Nueva nota</td>
           <td><input type="text" name="not_tec" /></td>
@@ -88,7 +99,7 @@
 import axios from 'axios';
 
 export default {
-  name: 'editIncidence',
+  name: 'attendIncidence',
   props: ['incidence', 'user'],
   components: {
   },
@@ -98,6 +109,8 @@ export default {
       issueDesc: undefined,
       selected: undefined,
       selectedPiece: undefined,
+      selectedPieces: [],
+      pieces: undefined,
     }
   },
   methods: {
@@ -112,6 +125,7 @@ export default {
             incidenceId: this.incidence.id,
             incidenceDesc: this.issueDesc,
             employeeId: this.user.id,
+            pieces: this.selectedPieces,
           },
           headers: [],
         }).then(
@@ -121,9 +135,19 @@ export default {
         this.$emit('reloadoff');
       }
     },
+    addPiece: function()
+    {
+      if (!this.selectedPieces.includes(this.selectedPiece)) {
+        this.selectedPieces.push(this.selectedPiece);
+      }
+    }
   },
   mounted(){
     this.issueDesc = this.incidence.issueDesc;
+      axios.get("http://localhost:8082/newMenu.php?funcion=getPiecesList")
+      .then( data => {
+        this.pieces = data.data;
+    });
   }
 }
 </script>

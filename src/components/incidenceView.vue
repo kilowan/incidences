@@ -89,15 +89,17 @@
     @reloadoff="reloadoff()"
     @stepBack="menu='main'"/>
   </div>
-  <div v-else-if="menu=='attend' && incidence">
+  <div v-else-if="menu=='modify' && incidence">
     <modify-incidence
+    v-if="incidence.owner"
     :user="user" 
     :incidence="incidence"
     @reload="reload()"
     @stepBack="reloadoff()"/>
   </div>
   <div v-else>
-    <attend-incidence 
+    <attend-incidence
+    v-if="checkIncidence()"
     :user="user" 
     :incidence="incidence"
     @reload="reload()"
@@ -134,6 +136,10 @@ export default {
     check: function()
     {
       return Object.keys(this.incidences).length >0;
+    },
+    checkIncidence: function()
+    {
+      return this.incidence.owner ? true : false;
     },
     hide: function()
     {
