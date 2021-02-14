@@ -71,7 +71,7 @@ export default {
 }
 </script>
 <style>
-.crearP, .nuevoemp
+.crearP
 {
 	text-align: center;
 	border: 2px solid black;
