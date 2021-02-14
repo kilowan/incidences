@@ -23,12 +23,12 @@
             <td>{{employee.surname1}}</td>
             <td>{{employee.surname2}}</td>
             <td>{{employee.tipo}}</td>
-            <td><a href="veremp.php?id={{employee.id}}&funcion=Borrar_empleado">Borrar</a></td>
+            <td><a href="#" @click="deleteEmployee(employee.id)">Borrar</a></td>
             <td><a href="#" @click="edit(employee)">Editar</a></td>
         </tr>
         <tr>
           <td colspan="8">
-              <a href="veremp.php?funcion=Agregar_empleado&id_emp={{employee.id}}&dni={{employee.dni}}">Agregar nuevo</a>
+              <a href="#" @click="add()">Agregar nuevo</a>
           </td>
         </tr>
     </table>
@@ -40,7 +40,12 @@
     <edit-employee 
     :user="employeSelected"
     @stepBack="mod = 'employeeList'"
-    @reload="mod = 'employeeList'"/>
+    @reload="reload()"/>
+  </div>
+  <div v-else-if="mod=='add'" id="add">
+    <add-employee 
+    @stepBack="mod = 'employeeList'"
+    @reload="reload()"/>
   </div>
 </template>
 
@@ -49,6 +54,7 @@
 import axios from 'axios';
 import UserPanel from './userPanel.vue';
 import editEmployee from './editEmployee.vue';
+import addEmployee from './addEmployee.vue';
 
 export default {
   name: 'userInfo',
@@ -56,6 +62,7 @@ export default {
   components: {
     UserPanel,
     editEmployee,
+    addEmployee,
   },
   data:function()
   {
@@ -76,16 +83,39 @@ export default {
     {
       this.employeSelected = employee;
       this.mod = 'edit';
-    }
-  },
-  mounted(){
-    axios({
+    },
+    add:function()
+    {
+      this.mod = 'add';
+    },
+    reload: function()
+    {
+      this.load();
+      this.mod = 'employeeList';
+    },
+    deleteEmployee: function(id)
+    {
+      axios({
+      method: 'get',
+      url: 'http://localhost:8082/newMenu.php?funcion=removeEmployee&id=' + id,
+      })
+      .then(
+        this.load()
+      );
+    },
+    load: function()
+    {
+      axios({
       method: 'get',
       url: 'http://localhost:8082/newMenu.php?funcion=getEmpolyeeList',
-    })
-    .then(data =>
-      this.employees = data.data
-    );
+      })
+      .then(data =>
+        this.employees = data.data
+      );
+    },
+  },
+  mounted(){
+    this.load();
   }
 }
 </script>
