@@ -121,7 +121,7 @@ export default {
   methods: {
     updateIncidence: function()
     {
-      if (this.selected == 'Cerrar parte') {
+      if (this.selected == 'cierraparte') {
         this.close = true;
       }
         axios({
