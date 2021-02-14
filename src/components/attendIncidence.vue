@@ -56,16 +56,18 @@
         <td><button @click="addPiece()">Añadir</button></td>
       </tr>
   </table><br />
-  <table v-if="selectedPieces.length>0">
-    <tr>
-      <th>Piezas seleccionas:</th>
-    </tr>
-  </table>
-  <table>
-    <tr v-for="(selectedPiece, index) in selectedPieces" v-bind:key="index">
-      <td v-text="selectedPiece"/>
-    </tr>
-  </table><br />
+  <div v-if="selectedPieces.length>0">
+    <table>
+      <tr>
+        <th>Piezas seleccionas:</th>
+      </tr>
+    </table>
+    <table>
+      <tr v-for="(selectedPiece, index) in selectedPieces" v-bind:key="index">
+        <td v-text="selectedPiece"/>
+      </tr>
+    </table><br />
+  </div>
   <table>
     <tr>
       <th>Nota</th>
@@ -74,7 +76,7 @@
   <table>
       <tr>
           <td>Nueva nota</td>
-          <td><input type="text" name="not_tec" /></td>
+          <td><input type="text" v-model="note" /></td>
       </tr>
       <tr>
           <td>Función</td>
@@ -90,7 +92,7 @@
               <a href="#" @click="updateIncidence()">Guardar</a>
           </td>
       </tr>
-  </table>
+  </table><br />
   <a href="#" @click="back()" class="link" center>Atrás</a>
 </template>
 
@@ -111,34 +113,41 @@ export default {
       selectedPiece: undefined,
       selectedPieces: [],
       pieces: undefined,
+      note: undefined,
+      close: false,
+      PieceIdsSelected: [],
     }
   },
   methods: {
     updateIncidence: function()
     {
-      if (this.incidence.issueDesc != this.issueDesc) {
+      if (this.selected == 'Cerrar parte') {
+        this.close = true;
+      }
         axios({
           method: 'post',
           url: 'http://localhost:8082/newMenu.php',
           data: {
-            funcion: 'updateNotes',
+            funcion: 'updateIncidence',
             incidenceId: this.incidence.id,
-            incidenceDesc: this.issueDesc,
-            employeeId: this.user.id,
-            pieces: this.selectedPieces,
+            userId: this.user.id,
+            note: this.note,
+            pieces: this.PieceIdsSelected,
+            close: this.close,
           },
           headers: [],
         }).then(
           this.$emit('reload')
         );
-      } else {
-        this.$emit('reloadoff');
-      }
     },
     addPiece: function()
     {
       if (!this.selectedPieces.includes(this.selectedPiece)) {
         this.selectedPieces.push(this.selectedPiece);
+        let piece = this.pieces.filter(data =>{
+          return data.name == this.selectedPiece;
+        })[0];
+        this.PieceIdsSelected.push(piece.id);
       }
     }
   },
