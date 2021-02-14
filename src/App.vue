@@ -27,7 +27,7 @@
       <statistics  v-if="user" :user="user"/>
     </div>
     <div v-else-if="check('employeeList')" class="cuerpo">
-      <employee-list  v-if="user" :user="user"/>
+      <employee-list  v-if="user" :user="user" :incidences="incidences"/>
     </div>
     <div v-else-if="check('incidences')" class="cuerpo">
       <incidences 
@@ -125,7 +125,7 @@ export default {
       if(this.user.permissions.includes("7") && this.user.permissions.includes("8") && this.user.permissions.includes("9"))
       {
           new_array = this.incidences.filter(array => {
-              return (array.owner.id == this.user.id);
+              return (array.owner.id == this.user.id && array.state != 5);
           });
           this.incidencesCount = new_array.length;
       }

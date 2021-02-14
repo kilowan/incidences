@@ -24,7 +24,7 @@
             <td>{{employee.surname2}}</td>
             <td>{{employee.tipo}}</td>
             <td><a href="veremp.php?id={{employee.id}}&funcion=Borrar_empleado">Borrar</a></td>
-            <td><a href="veremp.php?funcion=Editar_empleado&id_emp={{employee.id}}&dni={{employee.dni}}">Editar</a></td>
+            <td><a href="#" @click="edit(employee)">Editar</a></td>
         </tr>
         <tr>
           <td colspan="8">
@@ -33,8 +33,14 @@
         </tr>
     </table>
   </div>
-  <div v-else id="panel">
-    <user-panel :user="employee"/>
+  <div v-else-if="mod=='panel'" id="panel">
+    <user-panel :user="user" :incidences="incidences"/>
+  </div>
+  <div v-else-if="mod=='edit'" id="edit">
+    <edit-employee 
+    :user="employeSelected"
+    @stepBack="mod = 'employeeList'"
+    @reload="mod = 'employeeList'"/>
   </div>
 </template>
 
@@ -42,18 +48,21 @@
 
 import axios from 'axios';
 import UserPanel from './userPanel.vue';
+import editEmployee from './editEmployee.vue';
 
 export default {
   name: 'userInfo',
-  props: ['user'],
+  props: ['user', 'incidences'],
   components: {
-    UserPanel
+    UserPanel,
+    editEmployee,
   },
   data:function()
   {
     return {
       employees: undefined,
       employee: undefined,
+      employeSelected: undefined,
       mod: 'employeeList'
     }
   },
@@ -63,6 +72,11 @@ export default {
       this.employee = employee;
       this.mod = 'panel';
     },
+    edit: function(employee)
+    {
+      this.employeSelected = employee;
+      this.mod = 'edit';
+    }
   },
   mounted(){
     axios({

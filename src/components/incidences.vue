@@ -6,6 +6,7 @@
       <incidences-view v-if="newOwnIncidences"
       :incidences="newOwnIncidences"
       :user="user"
+      :admin="admin"
       :title="'Partes nuevos propios'"
       @linked="linked($event)"/>
 
@@ -13,6 +14,7 @@
       <incidences-view v-if="attendedOwnIncidences"
       :incidences="attendedOwnIncidences"
       :user="user"
+      :admin="admin"
       :title="'Partes atendidos propios'"
       @linked="linked($event)"/>
 
@@ -20,6 +22,7 @@
       <incidences-view v-if="closedOwnIncidences"
       :incidences="closedOwnIncidences"
       :user="user"
+      :admin="admin"
       :title="'Partes atendidos propios'"
       @linked="linked($event)"/>
 
@@ -27,6 +30,7 @@
       <incidences-view v-if="hiddenOwnIncidences"
       :incidences="hiddenOwnIncidences"
       :user="user"
+      :admin="admin"
       :title="'Partes ocultos propios'"
       @linked="linked($event)"/>
     </div>
@@ -36,6 +40,7 @@
       <incidences-view v-if="newIncidences"
       :incidences="newIncidences"
       :user="user"
+      :admin="admin"
       :title="'Partes nuevos'"
       @linked="linked($event)"/>
 
@@ -43,6 +48,7 @@
       <incidences-view v-if="attendedIncidences"
       :incidences="attendedIncidences"
       :user="user"
+      :admin="admin"
       :title="'Partes atendidos'"
       @linked="linked($event)"/>
 
@@ -50,6 +56,7 @@
       <incidences-view v-if="closedIncidences"
       :incidences="closedIncidences"
       :user="user"
+      :admin="admin"
       :title="'Partes cerrados'"
       @linked="linked($event)"/>
     </div>
@@ -72,7 +79,7 @@ import incidenceView from './incidenceView.vue';
 
 export default {
   name: 'incidences',
-  props: ['user', 'incidences'],
+  props: ['user', 'incidences', 'admin'],
   components: {
     incidencesView,
     incidenceView

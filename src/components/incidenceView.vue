@@ -38,17 +38,17 @@
             <a href="#" @click="deleteIncidence()">Borrar</a>
         </td>
         <td>
-            <a href="#" @click="editIncidence()">Editar</a>
+            <a href="#" @click="change('edit')">Editar</a>
         </td>
       </tr>
       <tr v-else-if="incidence.state == 1 && (user.permissions.includes('3') || user.permissions.includes('10')) && incidence.owner.id != user.id">
         <td colspan="2">
-            <a href="veremp.php?id_emp={{user.id}}&dni={{user.dni}}&id_part={{incidence.id}}&funcion=Atender_parte">Atender</a>
+            <a href="#" @click="change('attend')">Atender</a>
         </td>
       </tr>
       <tr v-else-if="incidence.state == 2 && (user.permissions.includes('5') || user.permissions.includes('11')) && incidence.owner.id != user.id">
         <td colspan="2">
-            <a href="veremp.php?funcion=Modificar_parte&id_emp={{user.id}}&dni={{user.dni}}&id_part={{incidence.id}}">Modificar</a>
+            <a href="#" @click="change('modify')">Modificar</a>
         </td>
       </tr>
       <tr v-else-if="incidence.state == 3 && user.permissions.includes('22')">
@@ -81,12 +81,20 @@
     </div>
     <a href="#" @click="back()" class="link">Atrás</a>
   </div>
-  <div v-else-if="menu=='edit'">
+  <div v-else-if="menu=='edit' && incidence">
     <edit-incidence
     :user="user"
     :incidence="incidence"
     @reload="reload()"
-    @reloadoff="reloadoff()"/>
+    @reloadoff="reloadoff()"
+    @stepBack="menu='main'"/>
+  </div>
+  <div v-else-if="menu=='attend' && incidence">
+    <modify-incidence
+    :user="user" 
+    :incidence="incidence"
+    @reload="reload()"
+    @stepBack="reloadoff()"/>
   </div>
   <div v-else>
     <attend-incidence 
@@ -102,6 +110,7 @@
 import axios from 'axios';
 import editIncidence from './editIncidence.vue';
 import attendIncidence from './attendIncidence.vue';
+import modifyIncidence from './modifyIncidence.vue';
 
 export default {
   name: 'incidencesView',
@@ -109,6 +118,7 @@ export default {
   components: {
     editIncidence,
     attendIncidence,
+    modifyIncidence,
   },
   data:function()
   {
@@ -145,13 +155,9 @@ export default {
         //this.hiddenOwnIncidences = data.data;
       });
     },
-    editIncidence: function()
+    change(mod)
     {
-      this.menu = 'edit';
-    },
-    attendIncidence: function()
-    {
-      this.menu = 'attend';
+      this.menu = mod;
     },
     deleteIncidence: function()
     {

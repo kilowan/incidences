@@ -2,7 +2,7 @@
   <!-- userInfo -->
   <user-info :user="user"/>
   <!-- incidences -->
-  <incidences :user="user"/>
+  <incidences :user="user" :incidences="incidences" :admin="true"/>
   <!-- userInfo -->
   <statistics :user="user"/>
 </template>
@@ -15,7 +15,7 @@ import incidences from './incidences.vue';
 
 export default {
   name: 'userPanel',
-  props: ['user'],
+  props: ['user', 'incidences'],
   components: {
     userInfo,
     statistics,

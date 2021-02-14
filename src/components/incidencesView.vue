@@ -14,12 +14,13 @@
         <th>Información</th>
       </tr>
       <tr v-for="(incidence, index) in incidences" v-bind:key="index">
-        <td><a href="#" @click="detail(incidence)">{{incidence.id}}</a></td>
-            <td v-if="incidence.initDateTime">{{incidence.initDateTime}}</td>
-            <td v-else>--</td>
-            <td v-if="incidence.issueDesc">{{incidence.issueDesc}}</td>
-            <td v-else>--</td>
-        </tr>
+        <td v-if="!admin"><a href="#" @click="detail(incidence)">{{incidence.id}}</a></td>
+        <td v-else>{{incidence.id}}</td>
+        <td v-if="incidence.initDateTime">{{incidence.initDateTime}}</td>
+        <td v-else>--</td>
+        <td v-if="incidence.issueDesc">{{incidence.issueDesc}}</td>
+        <td v-else>--</td>
+      </tr>
     </table><br />
     </div>
   </div>
@@ -29,7 +30,7 @@
 
 export default {
   name: 'incidencesView',
-  props: ['incidences', 'user', 'title'],
+  props: ['incidences', 'user', 'title', 'admin'],
   components: {
   },
   data:function()

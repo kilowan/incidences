@@ -1,30 +1,27 @@
 <template>
-  <!-- incidenceView -->
-		<br />
-    <table>
-      <tr>
-          <th>Editar parte</th>
-      </tr>
-    </table><br />
-		<form action="veremp.php" method="post">
-			<input type="hidden" name="id_part" value="'.$incidence->id.'" />
-			<input type="hidden" name="funcion" value="Actualizar_parte" />
-			<table>
-				<tr>
-					<th>Nº parte</th>
-					<th>Fecha de creación</th>
-					<th>Información</th>
-					<th>--</th>
-				</tr>
-				<tr>
-					<td>{{incidence.id}}</td>
-					<td>{{incidence.initDateTime}}</td>
-					<td><input type="text" name="issueDesc" v-model="issueDesc" required /></td>
-					<td><a href="#" v-if="issueDesc" @click="updateIncidence()">Guardar</a>
-          <a href="#" v-else disabled>Guardar</a></td>
-				</tr>
-			</table>
-		</form>
+  <!-- editIncidence -->
+  <br />
+  <table>
+    <tr>
+        <th>Editar parte</th>
+    </tr>
+  </table><br />
+  <table>
+    <tr>
+      <th>Nº parte</th>
+      <th>Fecha de creación</th>
+      <th>Información</th>
+      <th>--</th>
+    </tr>
+    <tr>
+      <td>{{incidence.id}}</td>
+      <td>{{incidence.initDateTime}}</td>
+      <td><input type="text" name="issueDesc" v-model="issueDesc" required /></td>
+      <td><a href="#" v-if="issueDesc" @click="updateIncidence()">Guardar</a>
+      <a href="#" v-else disabled>Guardar</a></td>
+    </tr>
+  </table><br />
+  <a href="#" @click="back()" class="link" center>Atrás</a>
 </template>
 
 <script>
@@ -43,6 +40,10 @@ export default {
     }
   },
   methods: {
+    back: function()
+    {
+      this.$emit('stepBack');
+    },
     updateIncidence: function()
     {
       if (this.incidence.issueDesc != this.issueDesc) {

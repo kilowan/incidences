@@ -3,7 +3,8 @@
     <table>
       <tr>
         <td>Nombre del empleado</td>
-        <td>{{incidence.owner.name}} {{incidence.owner.surname1}} {{$incidence.owner.surname2}}</td>
+        <td v-if="incidence.owner">{{incidence.owner.name}} {{incidence.owner.surname1}} {{$incidence.owner.surname2}}</td>
+        <td v-else>--</td>
       </tr>
       <tr>
         <td>Información</td>
@@ -68,7 +69,7 @@
         <tr>
           <td>Función</td>
           <td>
-            <select name="funcion">
+            <select v-model="funcion">
               <option value="insertparte">Actualizar parte</option>
               <option value="cierraparte">Cerrar parte</option>
             </select>
@@ -76,14 +77,14 @@
         </tr>
         <tr>
           <td>
-            <a href="#" name="Guardar" value="Guardar">Guardar</a>
+            <a href="#" @click="updateIncidence()">Guardar</a>
           </td>
         </tr>
     </table>
 </template>
     
 <script>
-  import axios from 'axios';
+  //import axios from 'axios';
 
   export default {
     name: 'modifyIncidence',
@@ -93,16 +94,18 @@
     data:function()
     {
       return {
-        issueDesc: undefined,
+        //issueDesc: undefined,
         selected: undefined,
         selectedPiece: undefined,
+        technicianNote: undefined,
+        funcion: undefined,
       }
     },
     methods: {
       updateIncidence: function()
       {
-        if (this.incidence.issueDesc != this.issueDesc) {
-          axios({
+        //if (this.incidence.issueDesc != this.issueDesc) {
+          /*axios({
             method: 'post',
             url: 'http://localhost:8082/newMenu.php',
             data: {
@@ -114,14 +117,14 @@
             headers: [],
           }).then(
             this.$emit('reload')
-          );
-        } else {
-          this.$emit('reloadoff');
-        }
+          );*/
+        //} else {
+          //this.$emit('reloadoff');
+        //}
       },
     },
     mounted(){
-      this.issueDesc = this.incidence.issueDesc;
+      //this.issueDesc = this.incidence.issueDesc;
     }
   }
 </script>

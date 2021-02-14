@@ -80,6 +80,7 @@
           </td>
       </tr>
   </table>
+  <a href="#" @click="back()" class="link" center>Atrás</a>
 </template>
 
 <script>
