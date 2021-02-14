@@ -47,7 +47,7 @@ export default {
     {
       axios({
         method: 'get',
-        url: 'http://localhost:8082/newMenu.php?funcion=updateEmployee&dni=' + this.userData.dni + '&name=' + this.userData.name + '&surname1=' + this.userData.surname1 + '&surname2=' + this.userData.surname2 + '&type=' + this.userData.type,
+        url: 'http://localhost:8082/newMenu.php?funcion=updateEmployee&dni=' + this.userData.dni + '&name=' + this.userData.name + '&surname1=' + this.userData.surname1 + '&surname2=' + this.userData.surname2 + '&type=' + this.userData.tipo,
         headers:[],
       }).then(
         this.$emit('reload')
