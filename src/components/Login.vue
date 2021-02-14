@@ -9,13 +9,11 @@
 			<div class="mensaje">
 				<p class="welcome">Bienvenidos</p>
 			</div>
-      <b-form>
 				<div class="login">
 					<input class="input" name="username" type="text" id="username" v-model="form.username" placeholder="username" required />
           <input class="input" name="password" type="password" id="password" v-model="form.pass" placeholder="password" required/>
 					<button @click="onSubmit()" v-if="form.username && form.pass" type="submit" variant="primary">LOGIN</button>
 				</div>
-			</b-form>
 		</div>
 		<div class="cuerpo">
 		</div>
