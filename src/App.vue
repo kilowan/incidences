@@ -32,8 +32,10 @@
     <div v-else-if="check('incidences')" class="cuerpo">
       <incidences 
       v-if="user" 
-      :user="user" 
+      :user="user"
+      :reload="reload"
       :incidences="incidences"
+      @linked="reload=false"
       />
     </div>
     <div v-else class="cuerpo">
@@ -90,12 +92,21 @@ export default {
       user: undefined,
       incidences: undefined,
       incidencesCount: 0,
+      reload: false,
     }
   },
   methods: {
     check: function(data)
     {
       return this.mod == data? true: false;
+    },
+    reloading: function()
+    {
+        axios.get("http://localhost:8082/newMenu.php?funcion=getAllincidences")
+        .then( datas => {
+          this.incidences = datas.data;
+          this.reload = true;
+        });
     },
     logedIn: function(data)
     {
@@ -106,19 +117,19 @@ export default {
         axios.get("http://localhost:8082/newMenu.php?funcion=getAllincidences")
         .then( datas => {
           this.incidences = datas.data;
-            axios.get("http://localhost:8082/newMenu.php?funcion=getAllincidences")
-            .then( datas => {
-              this.incidences = datas.data;
-              this.showIncidences();
-            });
+          this.showIncidences();
         });
       });
     },
     add:function(data)
     {
+      if (data == 'incidences' && this.mod =='incidences') {
+        this.reloading();
+      }
       this.mod = data;
       //window.location.pathname += data + '/';
     },
+
     showIncidences: function()
     {
       let new_array = undefined;
