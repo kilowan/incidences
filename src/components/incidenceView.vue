@@ -62,6 +62,18 @@
         </td>
       </tr>
     </table><br />
+    <div v-if="incidence.pieces">
+      <table>
+        <tr>
+            <th colspan="2">Piezas afectadas</th>
+        </tr>
+      </table>
+      <table>
+        <tr v-for="(piece, index) in incidence.pieces" v-bind:key="index">
+          <td>{{piece.name}}</td>
+        </tr>
+      </table>
+    </div><br />
     <div v-if="incidence.notes">
       <table>
         <tr>
