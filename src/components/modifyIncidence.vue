@@ -112,7 +112,13 @@
         return data.name == this.selectedPiece;
       })[0];
       
-      if (!this.piecesData.includes(piece)) {
+      let boolean = false;
+      this.piecesData.forEach(element => {
+        if (element.id == piece.id) {
+          boolean = true;
+        }
+      });
+      if (!boolean) {
         this.piecesData.push(piece);
         this.PieceIdsSelected.push(piece.id);
       }
