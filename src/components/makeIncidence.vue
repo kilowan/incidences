@@ -1,16 +1,45 @@
 <template>
   <!-- MakeIncidence -->
-    <br /><form  class="crearP">
-        <label>Descripción del problema:</label><br />
-        <textarea v-model="description" name="descripcion" rows="10" cols="40" placeholder="resumen del fallo"></textarea><br />
-        <p> ¿Que pieza crees que falla?:</p>
-        <p> 
-            <select v-model="selected" name="pieza" required>
-                <option v-for="piece in pieces" :key="piece.id" v-bind:value="piece.name">{{ piece.name }}</option>
+  <br /><table>
+    <tr>
+      <th>Crear parte</th>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td>Descripción del problema:</td>
+      <td><input type="textarea" placeholder="resumen del fallo" v-model="description" rows="10" cols="40"/></td>
+    </tr>
+  </table><br />
+  <table>
+      <tr v-if="pieces">
+        <th>¿Que pieza/s crees que falla/n?:</th>
+      </tr>
+  </table>
+  <table>
+      <tr>
+        <td>
+            <select v-model="selectedPiece" name="pieza">
+              <option value="--" selected="true">--</option>
+              <option v-for="(piece, index) in pieces" v-bind:key="index">{{ piece.name }}</option>
             </select>
-        </p>
-        <button :disabled="!checkForm()" @click="addIncidence()" name="Submit" type="submit">Crear parte</button>
-    </form><br/>
+        </td>
+        <td><button @click="addPiece()">Añadir</button></td>
+      </tr>
+  </table><br />
+  <div v-if="selectedPieces.length>0">
+    <table>
+      <tr>
+        <th>Piezas seleccionas:</th>
+      </tr>
+    </table>
+    <table>
+      <tr v-for="(selectedPiece, index) in selectedPieces" v-bind:key="index">
+        <td v-text="selectedPiece"/>
+      </tr>
+    </table><br />
+  </div>
+  <a href="#" v-if="selectedPieces.length>0 && description" @click="addIncidence()" class="link" center>Enviar</a>
 </template>
 
 <script>
@@ -29,9 +58,22 @@ export default {
       checked: false,
       choosen: '--',
       description: undefined,
+      selectedPiece: undefined,
+      selectedPieces: [],
+      PieceIdsSelected: [],
     }
   },
   methods: {
+    addPiece: function()
+    {
+      if (!this.selectedPieces.includes(this.selectedPiece)) {
+        this.selectedPieces.push(this.selectedPiece);
+        let piece = this.pieces.filter(data =>{
+          return data.name == this.selectedPiece;
+        })[0];
+        this.PieceIdsSelected.push(piece.id);
+      }
+    },
     addIncidence: function()
     {
       axios({
@@ -41,9 +83,7 @@ export default {
           funcion: 'addIncidence',
           ownerId: this.user.id,
           issueDesc: this.description,
-          pieces: [
-            this.getPiece(),
-          ]
+          pieces: this.PieceIdsSelected,
         },
       headers:[]
       })

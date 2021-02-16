@@ -10,14 +10,14 @@
       </a>
     </div>
     <div class="opciones">
-      <a href="#" @click="add('Crear_parte')" v-if="user.permissions.includes('13')" class="link">Crear parte</a>
+      <a href="#" @click="add('MakeIncidence')" v-if="user.permissions.includes('13')" class="link">Crear parte</a>
       <a href="#" @click="add('incidences')" v-if="incidencesCount >0" class="link">Ver partes</a>
       <a href="#" @click="add('statistics')" v-if="user.permissions.includes('2')" class="link" >Estadísticas</a> 
       <a href="#" @click="add('employeeList')" v-if="user.permissions.includes('16')" class="link">Lista empleados</a>
       <a href="#" @click="add('user_info')" class="link" >Datos personales</a>
     </div>
   </div>
-    <div v-if="check('Crear_parte')" class="cuerpo">
+    <div v-if="check('MakeIncidence')" class="cuerpo">
       <make-incidence v-if="user" :user="user" @closeForm="mod='Main'" class="mensaje"/>
     </div>
     <div v-else-if="check('user_info')" class="cuerpo">
@@ -56,21 +56,6 @@ import login from './components/Login.vue';
 import statistics from './components/statistics.vue';
 import employeeList from './components/employeeList.vue';
 import incidences from './components/incidences.vue';
-//import Vue from 'vue';
-//import VueRouter from 'vue-router'
-
-/*const routes = [
-  {
-    path: "menu/makeIncidence",
-    name: "makeIncidence",
-    component: makeIncidence
-  },
-];*/
-
-/*var router = new VueRouter({
-  mode: "history",
-  routes
-});*/
 
 export default {
   name: 'App',
@@ -81,8 +66,6 @@ export default {
     statistics,
     employeeList,
     incidences,
-    //Vue,
-    //VueRouter,
   },
   data:function()
   {
@@ -127,7 +110,6 @@ export default {
         this.reloading();
       }
       this.mod = data;
-      //window.location.pathname += data + '/';
     },
 
     showIncidences: function()
@@ -170,13 +152,7 @@ export default {
     }
   },
   mounted:function()
-  {
-    /*axios.get("http://localhost:8082/newMenu.php?funcion=getEmployeeById&id="+ this.Id)
-    .then( data => {
-      this.response = data.data;
-      console.log(this.response.name);
-    });*/
-  }
+  {}
 }
 </script>
 

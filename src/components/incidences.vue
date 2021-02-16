@@ -23,7 +23,7 @@
       :incidences="closedOwnIncidences"
       :user="user"
       :admin="admin"
-      :title="'Partes atendidos propios'"
+      :title="'Partes cerrados propios'"
       @linked="linked($event)"/>
 
       <!-- hidden -->
