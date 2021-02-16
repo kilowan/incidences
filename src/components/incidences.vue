@@ -23,7 +23,7 @@
       :incidences="closedOwnIncidences"
       :user="user"
       :admin="admin"
-      :title="'Partes atendidos propios'"
+      :title="'Partes cerrados propios'"
       @linked="linked($event)"/>
 
       <!-- hidden -->
@@ -63,10 +63,10 @@
   </div>
   <div v-else>
     <incidence-view 
-      v-if="incidence" 
+      v-if="incidence && checkreload()"
       :user="user" 
       :incidence="incidence"
-      @reload="reload()"
+      @reload="reloading()"
       @stepBack="back()"
       />
   </div>
@@ -79,7 +79,7 @@ import incidenceView from './incidenceView.vue';
 
 export default {
   name: 'incidences',
-  props: ['user', 'incidences', 'admin'],
+  props: ['user', 'incidences', 'admin', 'reload'],
   components: {
     incidencesView,
     incidenceView
@@ -101,6 +101,7 @@ export default {
     linked:function(incidence)
     {
       this.incidence = incidence;
+      this.$emit('linked');
     },
     checkPermissions: function(permissions, permissionNumbers)
     {
@@ -112,10 +113,19 @@ export default {
       });
       return result;
     },
-    reload: function()
+    reloading: function()
     {
       this.incidence = undefined;
       this.$emit('reload');
+    },
+    checkreload: function()
+    {
+      if (!this.reload) {
+        return true
+      } else {
+        this.incidence = undefined;
+        return false;
+      }
     },
     back: function()
     {
