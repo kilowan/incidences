@@ -150,7 +150,7 @@ export default {
       }
       if (this.checkPermissions(this.user.permissions, ['10', '11', '12']) || this.checkPermissions(this.user.permissions, ['3', '4', '5'])) {
         this.newIncidences = this.incidences.filter(data => {
-          return data.state == 1;
+          return data.state == 1 && data.owner.id != this.user.id;
         });
         this.attendedIncidences = this.incidences.filter(data => {
           return data.solver.dni == this.user.dni && data.state == 2;
