@@ -1,9 +1,17 @@
 <template>
   <!-- own incidences -->
   <br /><div v-if="!incidence">
+    <table>
+      <tr>
+        <th><a href="#" v-if="newOwnIncidences.length >0 || newIncidences.length >0" @click="selectTab('new')">Nuevos</a></th>
+        <th><a href="#" v-if="attendedOwnIncidences.length >0 || attendedIncidences.length >0" @click="selectTab('current')">Atendidos</a></th>
+        <th><a href="#" v-if="closedOwnIncidences.length >0 || closedIncidences.length >0" @click="selectTab('old')">Cerrados</a></th>
+        <th><a href="#" v-if="hiddenOwnIncidences.length >0" @click="selectTab('hidden')">Ocultos</a></th>
+      </tr>
+    </table><br />
     <div v-if="checkPermissions(user.permissions, ['6', '7', '8', '9'])">
       <!-- new -->
-      <incidences-view v-if="newOwnIncidences"
+      <incidences-view v-if="newOwnIncidences && tab=='new'"
       :incidences="newOwnIncidences"
       :user="user"
       :admin="admin"
@@ -11,7 +19,7 @@
       @linked="linked($event)"/>
 
       <!-- attended -->
-      <incidences-view v-if="attendedOwnIncidences"
+      <incidences-view v-if="attendedOwnIncidences && tab=='current'"
       :incidences="attendedOwnIncidences"
       :user="user"
       :admin="admin"
@@ -19,7 +27,7 @@
       @linked="linked($event)"/>
 
       <!-- closed -->
-      <incidences-view v-if="closedOwnIncidences"
+      <incidences-view v-if="closedOwnIncidences && tab=='old'"
       :incidences="closedOwnIncidences"
       :user="user"
       :admin="admin"
@@ -27,7 +35,7 @@
       @linked="linked($event)"/>
 
       <!-- hidden -->
-      <incidences-view v-if="hiddenOwnIncidences"
+      <incidences-view v-if="hiddenOwnIncidences && tab=='hidden'"
       :incidences="hiddenOwnIncidences"
       :user="user"
       :admin="admin"
@@ -38,14 +46,14 @@
     <div v-if="checkPermissions(user.permissions, ['10', '11', '12']) || checkPermissions(user.permissions, ['3', '4', '5'])">
       <!-- new -->
       <incidences-view v-if="newIncidences"
-      :incidences="newIncidences"
+      :incidences="newIncidences && tab=='new'"
       :user="user"
       :admin="admin"
       :title="'Partes nuevos'"
       @linked="linked($event)"/>
 
       <!-- attended -->
-      <incidences-view v-if="attendedIncidences"
+      <incidences-view v-if="attendedIncidences && tab=='current'"
       :incidences="attendedIncidences"
       :user="user"
       :admin="admin"
@@ -53,7 +61,7 @@
       @linked="linked($event)"/>
 
       <!-- closed -->
-      <incidences-view v-if="closedIncidences"
+      <incidences-view v-if="closedIncidences && tab=='old'"
       :incidences="closedIncidences"
       :user="user"
       :admin="admin"
@@ -87,14 +95,15 @@ export default {
   data:function()
   {
     return {
-      newOwnIncidences: undefined,
-      attendedOwnIncidences: undefined,
-      closedOwnIncidences: undefined,
-      hiddenOwnIncidences: undefined,
-      closedIncidences: undefined,
-      attendedIncidences: undefined,
-      newIncidences: undefined,
+      newOwnIncidences: [],
+      attendedOwnIncidences: [],
+      closedOwnIncidences: [],
+      hiddenOwnIncidences: [],
+      closedIncidences: [],
+      attendedIncidences: [],
+      newIncidences: [],
       incidence: undefined,
+      tab: 'new',
     }
   },
   methods: {
@@ -116,6 +125,7 @@ export default {
     reloading: function()
     {
       this.incidence = undefined;
+      this.tab = 'new';
       this.$emit('reload');
     },
     checkreload: function()
@@ -126,6 +136,10 @@ export default {
         this.incidence = undefined;
         return false;
       }
+    },
+    selectTab:function(tab)
+    {
+      this.tab = tab;
     },
     back: function()
     {
