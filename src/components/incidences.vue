@@ -45,8 +45,8 @@
     <!-- other incidences -->
     <div v-if="checkPermissions(user.permissions, ['10', '11', '12']) || checkPermissions(user.permissions, ['3', '4', '5'])">
       <!-- new -->
-      <incidences-view v-if="newIncidences"
-      :incidences="newIncidences && tab=='new'"
+      <incidences-view v-if="newIncidences && tab=='new'"
+      :incidences="newIncidences"
       :user="user"
       :admin="admin"
       :title="'Partes nuevos'"
