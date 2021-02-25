@@ -3,10 +3,10 @@
   <br /><div v-if="!incidence">
     <table>
       <tr>
-        <th><a href="#" v-if="newOwnIncidences.length >0 || newIncidences.length >0" @click="selectTab('new')">Nuevos</a></th>
-        <th><a href="#" v-if="attendedOwnIncidences.length >0 || attendedIncidences.length >0" @click="selectTab('current')">Atendidos</a></th>
-        <th><a href="#" v-if="closedOwnIncidences.length >0 || closedIncidences.length >0" @click="selectTab('old')">Cerrados</a></th>
-        <th><a href="#" v-if="hiddenOwnIncidences.length >0" @click="selectTab('hidden')">Ocultos</a></th>
+        <th v-if="newOwnIncidences.length >0 || newIncidences.length >0"><a href="#"  @click="selectTab('new')">Nuevos</a></th>
+        <th v-if="attendedOwnIncidences.length >0 || attendedIncidences.length >0"><a href="#"  @click="selectTab('current')">Atendidos</a></th>
+        <th v-if="closedOwnIncidences.length >0 || closedIncidences.length >0"><a href="#" @click="selectTab('old')">Cerrados</a></th>
+        <th v-if="hiddenOwnIncidences.length >0"><a href="#" @click="selectTab('hidden')">Ocultos</a></th>
       </tr>
     </table><br />
     <div v-if="checkPermissions(user.permissions, ['6', '7', '8', '9'])">
