@@ -20,11 +20,11 @@
       <tr>
         <td>
             <select v-model="selectedPiece" name="pieza">
-              <option value="--" selected="true">--</option>
               <option v-for="(piece, index) in pieces" v-bind:key="index">{{ piece.name }}</option>
             </select>
+          <button v-if="selectedPiece" @click="addPiece()">Añadir</button>
+          <button v-if="selectedPieces.length>0" @click="reset()">Reiniciar</button>
         </td>
-        <td><button @click="addPiece()">Añadir</button></td>
       </tr>
   </table><br />
   <div v-if="selectedPieces.length>0">
@@ -67,12 +67,19 @@ export default {
     addPiece: function()
     {
       if (!this.selectedPieces.includes(this.selectedPiece)) {
+        if (this.selectedPieces.includes('no sé') || this.selectedPiece == 'no sé') {
+          this.reset();
+        }
         this.selectedPieces.push(this.selectedPiece);
         let piece = this.pieces.filter(data =>{
           return data.name == this.selectedPiece;
         })[0];
         this.PieceIdsSelected.push(piece.id);
       }
+    },
+    reset: function()
+    {
+      this.selectedPieces = []
     },
     addIncidence: function()
     {
