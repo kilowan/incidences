@@ -152,15 +152,24 @@
       </table><br />
       <table>
         <tr>
-          <th>Nota</th>
+          <th>Nueva nota</th>
         </tr>
       </table>
       <table>
         <tr>
-          <td>Nueva nota</td>
           <td><input type="text" v-model="note" /></td>
         </tr>
       </table><br />
+    <div v-if="incidence.notes">
+      <table>
+        <tr>
+          <th colspan="2">Notas anteriores</th>
+        </tr>
+        <tr v-for="(note, index) in incidence.notes" v-bind:key="index">
+          <td>{{note.noteStr}}</td>
+        </tr>
+      </table><br />
+    </div>
       <table>
         <tr>
           <th>Pieza</th>
@@ -191,23 +200,6 @@
           </td>
         </tr>
     </table><br />
-    <div v-if="incidence.notes">
-      <table>
-        <tr>
-          <th>Notas anteriores</th>
-        </tr>
-      </table><br />
-      <table>
-        <tr>
-          <th>Nota</th>
-          <th>Fecha</th>
-        </tr>
-        <tr v-for="(note, index) in incidence.notes" v-bind:key="index">
-          <td>{{note.noteStr}}</td>
-          <td>{{note.date}}</td>
-        </tr>
-      </table><br />
-    </div>
     <table>
       <tr>
         <th>Piezas afectadas:</th>
