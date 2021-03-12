@@ -123,6 +123,46 @@
   </div>
   <div v-else-if="functions=='modify'">
   <!-- modifyIncidence -->
+    <div v-if="incidence.notes">
+      <table>
+        <tr>
+          <th colspan="2">Notas anteriores</th>
+        </tr>
+        <tr v-for="(note, index) in incidence.notes" v-bind:key="index">
+          <td>{{note.noteStr}}</td>
+        </tr>
+        <tr v-if="addNote">
+          <td>
+            <input type="text" v-model="note" /> <a href="#" @click="addNote = false">Reiniciar</a>
+          </td>
+        </tr>
+        <tr v-if="!addNote">
+          <a href="#" @click="addOn()">Añadir</a>
+        </tr>
+      </table><br />
+    </div>
+    <table>
+      <tr>
+        <th>Piezas afectadas:</th>
+      </tr>
+    </table>
+    <table>
+      <tr v-for="(piece, index) in incidence.pieces" v-bind:key="index">
+        <td>{{piece.name}}</td>
+      </tr>
+      <tr v-if="checkPiece">
+        <td>
+            <select name="pieza" v-model="selectedPiece">
+              <option value="Selecciona una pieza" selected="selected">Selecciona una pieza</option>
+              <option v-for="(piece, index) in pieces" v-bind:key="index">{{piece.name}}</option>
+            </select> <button @click="addPiecePlus()">Añadir</button> <a href="#" @click="checkPiece = false">Reiniciar</a>
+        </td>
+      </tr>
+      <tr v-if="!checkPiece">
+        <a href="#" @click="addOnPiece()">Añadir</a>
+      </tr>
+    </table><br />
+  </div>
     <table>
       <tr>
         <th colspan="2">Datos del parte</th>
@@ -149,42 +189,6 @@
         <td v-if="incidence.initDateTime">{{incidence.initDateTime}}</td>
         <td v-else>--</td>
       </tr>
-      </table><br />
-      <table>
-        <tr>
-          <th>Nueva nota</th>
-        </tr>
-      </table>
-      <table>
-        <tr>
-          <td><input type="text" v-model="note" /></td>
-        </tr>
-      </table><br />
-    <div v-if="incidence.notes">
-      <table>
-        <tr>
-          <th colspan="2">Notas anteriores</th>
-        </tr>
-        <tr v-for="(note, index) in incidence.notes" v-bind:key="index">
-          <td>{{note.noteStr}}</td>
-        </tr>
-      </table><br />
-    </div>
-      <table>
-        <tr>
-          <th>Pieza</th>
-        </tr>
-      </table>
-      <table>
-        <tr>
-          <td>Nueva pieza</td>
-          <td>
-            <select name="pieza" v-model="selectedPiece">
-              <option value="--" selected="selected">--</option>
-              <option v-for="(piece, index) in pieces" v-bind:key="index">{{piece.name}}</option>
-            </select>
-            <button @click="addPiecePlus()">Añadir</button></td>
-        </tr>
         <tr>
           <td>Función</td>
           <td>
@@ -200,17 +204,6 @@
           </td>
         </tr>
     </table><br />
-    <table>
-      <tr>
-        <th>Piezas afectadas:</th>
-      </tr>
-    </table>
-    <table>
-      <tr v-for="(piece, index) in incidence.pieces" v-bind:key="index">
-        <td>{{piece.name}}</td>
-      </tr>
-    </table><br />
-  </div>
 </template>
 
 <script>
@@ -227,7 +220,7 @@ export default {
     return {
       issueDesc: undefined,
       selected: undefined,
-      selectedPiece: '--',
+      selectedPiece: 'Selecciona una pieza',
       selectedPieces: [],
       pieces: undefined,
       note: undefined,
@@ -235,6 +228,8 @@ export default {
       PieceIdsSelected: [],
       funcion: undefined,
       piecesData: undefined,
+      addNote: false,
+      checkPiece: false,
     }
   },
   methods: {
@@ -251,6 +246,14 @@ export default {
         })[0];
         this.PieceIdsSelected.push(piece.id);
       }
+    },
+    addOn: function()
+    {
+      this.addNote = true;
+    },
+    addOnPiece: function()
+    {
+      this.checkPiece = true;
     },
     addPiecePlus: function()
     {
