@@ -109,7 +109,8 @@
     :incidence="incidence"
     :functions="'modify'"
     @reload="reload()"
-    @stepBack="reloadoff()"/>
+    @reloadoff="reloadoff()"
+    @stepBack="menu='main'"/>
   </div>
   <div v-else>
     <incidence-module

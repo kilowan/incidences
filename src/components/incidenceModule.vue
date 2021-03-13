@@ -4,25 +4,31 @@
     <br />
     <table>
       <tr>
-          <th>Editar parte</th>
+        <th>Editar parte</th>
       </tr>
     </table><br />
+    <!-- Datos del parte -->
     <table>
-      <tr>
-        <th>Nº parte</th>
-        <th>Fecha de creación</th>
-        <th>Información</th>
-        <th>--</th>
-      </tr>
-      <tr>
-        <td>{{incidence.id}}</td>
-        <td>{{incidence.initDateTime}}</td>
-        <td><input type="text" name="issueDesc" v-model="issueDesc" required /></td>
-        <td><a href="#" v-if="issueDesc" @click="editIncidence()">Guardar</a>
-        <a href="#" v-else disabled>Guardar</a></td>
-      </tr>
+        <tr>
+          <td>Nombre del empleado</td>
+          <td>{{incidence.owner.name}} {{incidence.owner.surname1}} {{incidence.owner.surname2}}</td>
+        </tr>
+        <tr>
+          <td>Información</td>
+          <td><input type="text" name="issueDesc" v-model="issueDesc" required /></td>
+        </tr>
+        <tr>
+          <td>Tecnico a cargo</td>
+            <td>--</td>
+        </tr>
+        <tr>
+          <td>Fecha de creación</td>
+          <td>{{incidence.initDateTime}}</td>
+        </tr>
+        <tr>
+          <td colspan="2" v-if="issueDesc"><a href="#" @click="editIncidence()">Guardar</a></td>
+        </tr>
     </table><br />
-    <a href="#" @click="back()" class="link" center>Atrás</a>
   </div>
   <div v-else-if="functions=='attend'">
     <!-- attendIncidence -->
@@ -119,14 +125,13 @@
             </td>
         </tr>
     </table><br />
-    <a href="#" @click="back()" class="link" center>Atrás</a>
   </div>
   <div v-else-if="functions=='modify'">
   <!-- modifyIncidence -->
     <div v-if="incidence.notes">
-      <table>
+      <table v-if="functions=='modify'">
         <tr>
-          <th colspan="2">Notas anteriores</th>
+          <th colspan="2">Notas</th>
         </tr>
         <tr v-for="(note, index) in incidence.notes" v-bind:key="index">
           <td>{{note.noteStr}}</td>
@@ -162,7 +167,6 @@
         <a href="#" @click="addOnPiece()">Añadir</a>
       </tr>
     </table><br />
-  </div>
     <table>
       <tr>
         <th colspan="2">Datos del parte</th>
@@ -181,7 +185,7 @@
       </tr>
       <tr>
         <td>Tecnico a cargo</td>
-        <td v-if="incidence.solver.id">{{incidence.solver.id}}</td>
+        <td v-if="incidence.solver">{{incidence.solver.id}}</td>
         <td v-else>--</td>
       </tr>
       <tr>
@@ -204,6 +208,8 @@
           </td>
         </tr>
     </table><br />
+  </div>
+<a href="#" @click="back()" class="link" center>Atrás</a>
 </template>
 
 <script>
