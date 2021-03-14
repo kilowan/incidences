@@ -1,48 +1,50 @@
 <template>
-  <!-- userInfo -->
-  <br /><table>
-    <tr>
-      <th>Datos personales</th>
-    </tr>
-  </table><br />
-  <table>
-    <tr>
-      <td>Id Empleado</td>
-      <td>{{ user.id }}</td>
-    </tr>
-    <tr>
-      <td>DNI</td>
-      <td>{{ user.dni }}</td>
-    </tr>
-    <tr>
-      <td>Nombre</td>
-      <td v-if="!editName" @click="editname()">{{ user.name }}</td>
-      <td v-if="editName">
-        <input type="text" v-model="name"/>
-      </td>
-    </tr>
-    <tr>
-      <td>Primer apellido</td>
-      <td v-if="!editSurname1" @click="editsurname1()">{{ user.surname1 }}</td>
-      <td v-if="editSurname1">
-        <input type="text" v-model="surname1"/>
-      </td>
-    </tr>
-    <tr>
-      <td>Segundo apellido</td>
-      <td v-if="!editSurname2" @click="editsurname2()">{{ user.surname2 }}</td>
-      <td v-if="editSurname2">
-        <input type="text" v-model="surname2"/>
-      </td>
-    </tr>
-    <tr>
-      <td>Tipo</td>
-      <td>{{ user.tipo }}</td>
-    </tr>
-    <tr v-if="editSurname2 || editSurname1 || editName">
-      <td colspan="2"><a href="#" @click="saveData()">Guardar</a></td>
-    </tr>
-  </table><br />
+  <div v-if="userDni && user">
+    <!-- userInfo -->
+    <br /><table>
+      <tr>
+        <th>Datos personales</th>
+      </tr>
+    </table><br />
+    <table>
+      <tr>
+        <td>Id Empleado</td>
+        <td>{{ user.id }}</td>
+      </tr>
+      <tr>
+        <td>DNI</td>
+        <td>{{ user.dni }}</td>
+      </tr>
+      <tr>
+        <td>Nombre</td>
+        <td v-if="!editName" @click="editname()">{{ user.name }}</td>
+        <td v-if="editName">
+          <input type="text" v-model="name"/>
+        </td>
+      </tr>
+      <tr>
+        <td>Primer apellido</td>
+        <td v-if="!editSurname1" @click="editsurname1()">{{ user.surname1 }}</td>
+        <td v-if="editSurname1">
+          <input type="text" v-model="surname1"/>
+        </td>
+      </tr>
+      <tr>
+        <td>Segundo apellido</td>
+        <td v-if="!editSurname2" @click="editsurname2()">{{ user.surname2 }}</td>
+        <td v-if="editSurname2">
+          <input type="text" v-model="surname2"/>
+        </td>
+      </tr>
+      <tr>
+        <td>Tipo</td>
+        <td>{{ user.tipo }}</td>
+      </tr>
+      <tr v-if="editSurname2 || editSurname1 || editName">
+        <td colspan="2"><a href="#" @click="saveData()">Guardar</a></td>
+      </tr>
+    </table><br />
+  </div>
 </template>
 
 <script>
@@ -51,12 +53,13 @@ import axios from 'axios';
 
 export default {
   name: 'userInfo',
-  props: ['user'],
+  props: ['userDni'],
   components: {
   },
   data:function()
   {
     return {
+      user: undefined,
       editName: false,
       editSurname1: false,
       editSurname2: false,
@@ -133,9 +136,22 @@ export default {
       this.surname2 = undefined;
       this.fields = [];
       this.values = [];
+      this.reloadUser()
+    },
+    reloadUser: function()
+    {
+      axios.get("http://localhost:8082/newMenu.php?funcion=getEmployeeByUsername&username="+ this.userDni)
+      .then( datas => {
+        this.user = datas.data;
+      });
     },
   },
-  mounted(){}
+  mounted(){
+    axios.get("http://localhost:8082/newMenu.php?funcion=getEmployeeByUsername&username="+ this.userDni)
+    .then( datas => {
+      this.user = datas.data;
+    });
+  }
 }
 </script>
 <style></style>
