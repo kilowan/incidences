@@ -15,12 +15,12 @@
           <th>Tipo</th>
           <th>--</th>
       </tr>
-      <tr v-if="userData">
-          <td><input type="text" name="dni" v-model="userData.dni" required /></td>
-          <td><input type="text" name="nombre" v-model="userData.name" required /></td>
-          <td><input type="text" name="apellido1" v-model="userData.surname1" required /></td>
-          <td><input type="text" name="apellido2" v-model="userData.surname2" /></td>
-          <td><input type="text" name="tipo" v-model="userData.tipo" required /></td>
+      <tr v-if="user">
+          <td>{{user.dni}}</td>
+          <td><input type="text" name="nombre" v-model="name" required /></td>
+          <td><input type="text" name="apellido1" v-model="surname1" required /></td>
+          <td><input type="text" name="apellido2" v-model="surname2" /></td>
+          <td><input type="text" name="tipo" v-model="tipo" required /></td>
           <td><a href="#" @click="save()">Guardar</a></td>
       </tr>
   </table><br/>
@@ -39,27 +39,80 @@ export default {
   data:function()
   {
     return {
-      userData: undefined
+      name: undefined,
+      surname1: undefined,
+      surname2: undefined,
+      tipo: undefined,
+      fields: [],
+      values: [],
     }
   },
   methods: {
     save()
     {
-      axios({
-        method: 'get',
-        url: 'http://localhost:8082/newMenu.php?funcion=updateEmployee&dni=' + this.userData.dni + '&name=' + this.userData.name + '&surname1=' + this.userData.surname1 + '&surname2=' + this.userData.surname2 + '&type=' + this.userData.tipo,
-        headers:[],
-      }).then(
-        this.$emit('reload')
-      );
+      this.fillData([this.name, this.surname1, this.surname2, this.tipo]);
+      if (this.fields.length >0) {
+        axios({
+          method: 'post',
+          url: 'http://localhost:8082/newMenu.php',
+          data: {
+            funcion: 'updateWorker',
+            dni: this.user.dni,
+            fields: this.fields,
+            values: this.values,
+          },
+          headers:[],
+        }).then(() =>{
+          this.$emit('reload');
+        });
+      }
+    },
+    reset: function()
+    {
+      this.name = undefined;
+      this.surname1 = undefined;
+      this.surname2 = undefined;
+      this.tipo = undefined;
+      this.fields = [];
+      this.values = [];
     },
     back:function()
     {
       this.$emit('stepBack');
-    }
+    },
+    checkField(field, field2)
+    {
+      return field && field != field2? true: false
+    },
+    fillData(data)
+    {
+      if(this.checkField(data[0], this.user.name))
+      {
+        this.values.push(data[0]);
+        this.fields.push("nombre");
+      }
+      if(this.checkField(data[1], this.user.surname1))
+      {
+        this.values.push(data[1]);
+        this.fields.push("apellido1");
+      }
+      if(this.checkField(data[2], this.user.surname2))
+      {
+        this.values.push(data[2]);
+        this.fields.push("apellido2");
+      }
+      if(this.checkField(data[3], this.user.tipo))
+      {
+        this.values.push(data[3]);
+        this.fields.push("tipo");
+      }
+    },
   },
   mounted(){
-    this.userData = this.user;
+      this.name = this.user.name;
+      this.surname1 = this.user.surname1;
+      this.surname2 = this.user.surname2;
+      this.tipo = this.user.tipo;
   }
 }
 </script>

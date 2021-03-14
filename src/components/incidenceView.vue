@@ -94,45 +94,46 @@
     <a href="#" @click="back()" class="link">Atrás</a>
   </div>
   <div v-else-if="menu=='edit' && incidence">
-    <edit-incidence
+    <incidence-module
     :user="user"
     :incidence="incidence"
+    :functions="'edit'"
     @reload="reload()"
     @reloadoff="reloadoff()"
     @stepBack="menu='main'"/>
   </div>
   <div v-else-if="menu=='modify' && incidence">
-    <modify-incidence
+    <incidence-module
     v-if="incidence.owner"
     :user="user" 
     :incidence="incidence"
+    :functions="'modify'"
     @reload="reload()"
-    @stepBack="reloadoff()"/>
+    @reloadoff="reloadoff()"
+    @stepBack="menu='main'"/>
   </div>
   <div v-else>
-    <attend-incidence
+    <incidence-module
     v-if="checkIncidence()"
     :user="user" 
     :incidence="incidence"
+    :functions="'attend'"
     @reload="reload()"
-    @reloadoff="reloadoff()"/>
+    @reloadoff="reloadoff()"
+    @stepBack="menu='main'"/>
   </div>
 </template>
 
 <script>
 
 import axios from 'axios';
-import editIncidence from './editIncidence.vue';
-import attendIncidence from './attendIncidence.vue';
-import modifyIncidence from './modifyIncidence.vue';
+import incidenceModule from './incidenceModule.vue';
 
 export default {
   name: 'incidencesView',
   props: ['incidence', 'user'],
   components: {
-    editIncidence,
-    attendIncidence,
-    modifyIncidence,
+    incidenceModule,
   },
   data:function()
   {
