@@ -21,7 +21,7 @@
       <make-incidence v-if="user" :user="user" @closeForm="mod='Main'" class="mensaje"/>
     </div>
     <div v-else-if="check('user_info')" class="cuerpo">
-      <user-info  v-if="user" :user="user"/>
+      <user-info  v-if="user" :user="user" @reloadUser="reloadUser($event)"/>
     </div>
     <div v-else-if="check('statistics')" class="cuerpo">
       <statistics  v-if="user" :user="user"/>
@@ -102,6 +102,13 @@ export default {
           this.incidences = datas.data;
           this.showIncidences();
         });
+      });
+    },
+    reloadUser: function(data)
+    {
+      axios.get("http://localhost:8082/newMenu.php?funcion=getEmployeeByUsername&username="+ data)
+      .then( datas => {
+        this.user = datas.data;
       });
     },
     add:function(data)
