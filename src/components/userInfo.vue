@@ -8,41 +8,36 @@
     </table><br />
     <table>
       <tr>
-        <td>Id Empleado</td>
-        <td>{{ user.id }}</td>
+        <td>Id Empleado: {{ user.id }}</td>
       </tr>
       <tr>
-        <td>DNI</td>
-        <td>{{ user.dni }}</td>
+        <td>DNI: {{ user.dni }}</td>
       </tr>
       <tr>
-        <td>Nombre</td>
-        <td v-if="!editName" @click="editname()">{{ user.name }}</td>
+        <td v-if="!editName" @click="editname()">Nombre: {{ user.name }}</td>
         <td v-if="editName">
-          <input type="text" v-model="name"/>
+          Nombre: <input type="text" v-model="name"/>
         </td>
       </tr>
       <tr>
-        <td>Primer apellido</td>
-        <td v-if="!editSurname1" @click="editsurname1()">{{ user.surname1 }}</td>
+        <td v-if="!editSurname1" @click="editsurname1()">Primer apellido: {{ user.surname1 }}</td>
         <td v-if="editSurname1">
-          <input type="text" v-model="surname1"/>
+          Primer apellido: <input type="text" v-model="surname1"/>
         </td>
       </tr>
       <tr>
-        <td>Segundo apellido</td>
-        <td v-if="!editSurname2" @click="editsurname2()">{{ user.surname2 }}</td>
+        <td  v-if="!editSurname2" @click="editsurname2()">Segundo apellido: {{ user.surname2 }}</td>
         <td v-if="editSurname2">
-          <input type="text" v-model="surname2"/>
+          Segundo apellido: <input type="text" v-model="surname2"/>
         </td>
       </tr>
       <tr>
-        <td>Tipo</td>
-        <td>{{ user.tipo }}</td>
+        <td>Tipo: {{ user.tipo }}</td>
       </tr>
       <tr v-if="editSurname2 || editSurname1 || editName">
-        <td colspan="2"><a href="#" @click="saveData()">Guardar</a></td>
-      </tr>
+        <td colspan="2"><a href="#" @click="saveData()">Guardar</a> <a href="#" @click="reset()">Reiniciar</a>
+      </td>
+    </tr>
     </table><br />
   </div>
 </template>
@@ -128,6 +123,11 @@ export default {
         );        
       }
       this.$emit('reloadUser', this.user.dni);
+      this.reset();
+      this.reloadUser();
+    },
+    reset: function()
+    {
       this.editName = false;
       this.editSurname1 = false;
       this.editSurname2 = false;
@@ -136,7 +136,6 @@ export default {
       this.surname2 = undefined;
       this.fields = [];
       this.values = [];
-      this.reloadUser()
     },
     reloadUser: function()
     {
