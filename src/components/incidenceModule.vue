@@ -1,7 +1,6 @@
 <template>
   <div v-if="functions=='edit'">
     <!-- editIncidence -->
-    <br />
     <table>
       <tr>
         <th>Editar parte</th>
@@ -29,6 +28,18 @@
           <td colspan="2" v-if="issueDesc"><a href="#" @click="editIncidence()">Guardar</a></td>
         </tr>
     </table><br />
+    <div v-if="incidence.pieces">
+      <table>
+        <tr>
+            <th colspan="2">Piezas afectadas</th>
+        </tr>
+      </table>
+      <table>
+        <tr v-for="(piece, index) in incidence.pieces" v-bind:key="index">
+          <td>{{piece.name}}</td>
+        </tr>
+      </table>
+    </div><br />
   </div>
   <div v-else-if="functions=='attend'">
     <!-- attendIncidence -->

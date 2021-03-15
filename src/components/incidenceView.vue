@@ -9,14 +9,8 @@
     </table><br />
     <table>
       <tr>
-        <td>Nº parte</td>
-        <td v-if="incidence.id">{{incidence.id}}</td>
-        <td v-else>--</td>
-      </tr>
-      <tr>
-        <td>Empleado</td>
-        <td v-if="incidence.owner.id">{{incidence.owner.id}}</td>
-        <td v-else>--</td>
+        <td>Nombre del empleado</td>
+        <td>{{incidence.owner.name}} {{ incidence.owner.surname1 }} {{ incidence.owner.surname2 }}</td>
       </tr>
       <tr>
         <td>Información</td>
