@@ -17,10 +17,9 @@
         <td v-if="incidence.issueDesc">{{incidence.issueDesc}}</td>
         <td v-else>--</td>
       </tr>
-      <tr>
+      <tr  v-if="incidence.solver.id">
         <td>Tecnico a cargo</td>
-        <td v-if="incidence.solver.id">{{incidence.solver.id}}</td>
-        <td v-else>--</td>
+        <td>{{ incidence.solver.name }} {{ incidence.solver.surname1 }} {{ incidence.solver.surname2 }}</td>
       </tr>
       <tr>
         <td>Fecha de creación</td>

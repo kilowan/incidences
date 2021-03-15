@@ -17,10 +17,6 @@
           <td><input type="text" name="issueDesc" v-model="issueDesc" required /></td>
         </tr>
         <tr>
-          <td>Tecnico a cargo</td>
-            <td>--</td>
-        </tr>
-        <tr>
           <td>Fecha de creación</td>
           <td>{{incidence.initDateTime}}</td>
         </tr>
@@ -43,7 +39,7 @@
   </div>
   <div v-else-if="functions=='attend'">
     <!-- attendIncidence -->
-    <br /><table>
+    <table>
         <tr>
             <th>Editar Parte</th>
         </tr>
@@ -51,15 +47,15 @@
     <table>
         <tr>
             <td>Nombre del empleado</td>
-            <td>{{incidence.owner.name}} {{incidence.owner.surname1}} {{incidence.owner.surname2}}</td>
+            <td>{{ incidence.owner.name }} {{ incidence.owner.surname1 }} {{ incidence.owner.surname2 }}</td>
         </tr>
         <tr>
             <td>Información</td>
             <td v-if="incidence.issueDesc">{{incidence.issueDesc}}</td>
         </tr>
-        <tr>
+        <tr v-if="incidence.solver.id">
             <td>Tecnico a cargo</td>
-            <td v-if="incidence.solver">{{incidence.solver.id}}</td>
+            <td>{{ incidence.solver.name }} {{ incidence.solver.surname1 }} {{ incidence.solver.surname2 }}</td>
         </tr>
         <tr>
             <td>Fecha de creación</td>
@@ -195,9 +191,8 @@
         <td v-else>--</td>
       </tr>
       <tr>
-        <td>Tecnico a cargo</td>
-        <td v-if="incidence.solver">{{incidence.solver.id}}</td>
-        <td v-else>--</td>
+        <td v-if="incidence.solver">Tecnico a cargo</td>
+        <td>{{ incidence.solver.name }} {{ incidence.solver.surname1 }} {{ incidence.solver.surname2 }}</td>
       </tr>
       <tr>
         <td>Fecha de creación</td>
