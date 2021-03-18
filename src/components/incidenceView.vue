@@ -4,7 +4,7 @@
   <div v-if="menu=='main'">
     <table>
       <tr>
-          <th>Ver Parte</th>
+          <th>Datos del parte</th>
       </tr>
     </table><br />
     <table>
@@ -70,7 +70,7 @@
     <div v-if="incidence.notes">
       <table>
         <tr>
-            <th colspan="2">Notas del ténico</th>
+            <th colspan="2">Notas</th>
         </tr>
       </table><br />
       <table>

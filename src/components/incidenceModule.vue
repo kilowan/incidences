@@ -1,29 +1,31 @@
 <template>
+  <table>
+    <tr>
+      <th>Datos del parte</th>
+    </tr>
+  </table><br />
+  <!-- Datos del parte -->
+  <table>
+      <tr>
+        <td>Nombre del empleado</td>
+        <td>{{incidence.owner.name}} {{incidence.owner.surname1}} {{incidence.owner.surname2}}</td>
+      </tr>
+      <tr>
+        <td>Información</td>
+        <td v-if="functions=='edit'"><input type="text" name="issueDesc" v-model="issueDesc" required /></td>
+        <td v-else>{{ incidence.issueDesc }}</td>
+      </tr>
+      <tr v-if="incidence.solver.id">
+        <td >Tecnico a cargo</td>
+        <td>{{ incidence.solver.name }} {{ incidence.solver.surname1 }} {{ incidence.solver.surname2 }}</td>
+      </tr>
+      <tr>
+        <td>Fecha de creación</td>
+        <td>{{incidence.initDateTime}}</td>
+      </tr>
+  </table><br />
   <div v-if="functions=='edit'">
     <!-- editIncidence -->
-    <table>
-      <tr>
-        <th>Editar parte</th>
-      </tr>
-    </table><br />
-    <!-- Datos del parte -->
-    <table>
-        <tr>
-          <td>Nombre del empleado</td>
-          <td>{{incidence.owner.name}} {{incidence.owner.surname1}} {{incidence.owner.surname2}}</td>
-        </tr>
-        <tr>
-          <td>Información</td>
-          <td><input type="text" name="issueDesc" v-model="issueDesc" required /></td>
-        </tr>
-        <tr>
-          <td>Fecha de creación</td>
-          <td>{{incidence.initDateTime}}</td>
-        </tr>
-        <tr>
-          <td colspan="2" v-if="issueDesc"><a href="#" @click="editIncidence()">Guardar</a></td>
-        </tr>
-    </table><br />
     <div v-if="incidence.pieces">
       <table>
         <tr>
@@ -36,32 +38,19 @@
         </tr>
       </table>
     </div><br />
+    <table>
+      <tr>
+        <th>Funciones</th>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <td colspan="2" v-if="issueDesc"><a href="#" @click="editIncidence()">Guardar</a></td>
+      </tr>
+    </table>
   </div>
   <div v-else-if="functions=='attend'">
     <!-- attendIncidence -->
-    <table>
-        <tr>
-            <th>Editar Parte</th>
-        </tr>
-    </table><br />
-    <table>
-        <tr>
-            <td>Nombre del empleado</td>
-            <td>{{ incidence.owner.name }} {{ incidence.owner.surname1 }} {{ incidence.owner.surname2 }}</td>
-        </tr>
-        <tr>
-            <td>Información</td>
-            <td v-if="incidence.issueDesc">{{incidence.issueDesc}}</td>
-        </tr>
-        <tr v-if="incidence.solver.id">
-            <td>Tecnico a cargo</td>
-            <td>{{ incidence.solver.name }} {{ incidence.solver.surname1 }} {{ incidence.solver.surname2 }}</td>
-        </tr>
-        <tr>
-            <td>Fecha de creación</td>
-            <td>{{incidence.initDateTime}}</td>
-        </tr>
-    </table><br />
     <div v-if="incidence.notes">
       <table>
           <tr>
@@ -85,28 +74,18 @@
         </tr>
     </table>
     <table>
-        <tr>
-          <td>
-              <select v-model="selectedPiece" name="pieza">
-                <option value="--">--</option>
-                <option v-for="(piece, index) in pieces" v-bind:key="index">{{ piece.name }}</option>
-              </select>
-          </td>
-          <td><button @click="addPiece()">Añadir</button></td>
-        </tr>
-    </table><br />
-    <div v-if="selectedPieces.length>0">
-      <table>
-        <tr>
-          <th>Piezas seleccionas:</th>
-        </tr>
-      </table>
-      <table>
         <tr v-for="(selectedPiece, index) in selectedPieces" v-bind:key="index">
           <td v-text="selectedPiece"/>
         </tr>
-      </table><br />
-    </div>
+        <tr>
+          <td>
+              <select v-model="selectedPiece" name="pieza" :multiple="false">
+                <option value="--">--</option>
+                <option v-for="(piece, index) in pieces" v-bind:key="index">{{ piece.name }}</option>
+              </select> <button @click="addPiece()">Añadir</button> <button v-if="selectedPieces.length>0" @click="selectedPieces = []">Reiniciar</button>
+            </td>
+        </tr>
+    </table><br />
     <table>
       <tr>
         <th>Nota</th>
@@ -126,33 +105,22 @@
                 </select>
             </td>
         </tr>
-        <tr>
-            <td>
-                <a href="#" @click="attendIncidence()">Guardar</a>
-            </td>
-        </tr>
     </table><br />
+    <table>
+      <tr>
+        <th>Funciones</th>
+      </tr>
+    </table>
+    <table>
+      <tr>
+          <td>
+              <a href="#" @click="attendIncidence()">Guardar</a>
+          </td>
+      </tr>
+    </table>
   </div>
   <div v-else-if="functions=='modify'">
   <!-- modifyIncidence -->
-    <div v-if="incidence.notes">
-      <table v-if="functions=='modify'">
-        <tr>
-          <th colspan="2">Notas</th>
-        </tr>
-        <tr v-for="(note, index) in incidence.notes" v-bind:key="index">
-          <td>{{note.noteStr}}</td>
-        </tr>
-        <tr v-if="addNote">
-          <td>
-            <input type="text" v-model="note" /> <a href="#" @click="addNote = false">Reiniciar</a>
-          </td>
-        </tr>
-        <tr v-if="!addNote">
-          <a href="#" @click="addOn()">Añadir</a>
-        </tr>
-      </table><br />
-    </div>
     <table>
       <tr>
         <th>Piezas afectadas:</th>
@@ -174,31 +142,30 @@
         <a href="#" @click="addOnPiece()">Añadir</a>
       </tr>
     </table><br />
+    <div v-if="incidence.notes">
+      <table v-if="functions=='modify'">
+        <tr>
+          <th colspan="2">Notas</th>
+        </tr>
+        <tr v-for="(note, index) in incidence.notes" v-bind:key="index">
+          <td>{{note.noteStr}}</td>
+        </tr>
+        <tr v-if="addNote">
+          <td>
+            <input type="text" v-model="note" /> <a href="#" @click="addNote = false">Reiniciar</a>
+          </td>
+        </tr>
+        <tr v-if="!addNote">
+          <a href="#" @click="addOn()">Añadir</a>
+        </tr>
+      </table><br />
+    </div>
     <table>
       <tr>
-        <th colspan="2">Datos del parte</th>
+        <th>Funciones</th>
       </tr>
-    </table><br />
+    </table>
     <table>
-      <tr>
-        <td>Nombre del empleado</td>
-        <td v-if="incidence">{{incidence.owner.name}} {{incidence.owner.surname1}} {{incidence.owner.surname2}}</td>
-        <td v-else>--</td>
-      </tr>
-      <tr>
-        <td>Información</td>
-        <td v-if="incidence.issueDesc">{{incidence.issueDesc}}</td>
-        <td v-else>--</td>
-      </tr>
-      <tr>
-        <td v-if="incidence.solver">Tecnico a cargo</td>
-        <td>{{ incidence.solver.name }} {{ incidence.solver.surname1 }} {{ incidence.solver.surname2 }}</td>
-      </tr>
-      <tr>
-        <td>Fecha de creación</td>
-        <td v-if="incidence.initDateTime">{{incidence.initDateTime}}</td>
-        <td v-else>--</td>
-      </tr>
         <tr>
           <td>Función</td>
           <td>
@@ -215,7 +182,7 @@
         </tr>
     </table><br />
   </div>
-<a href="#" @click="back()" class="link" center>Atrás</a>
+<br /><a href="#" @click="back()" class="link" center>Atrás</a>
 </template>
 
 <script>
