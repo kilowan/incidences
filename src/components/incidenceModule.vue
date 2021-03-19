@@ -24,12 +24,9 @@
         <td>{{incidence.initDateTime}}</td>
       </tr>
   </table><br />
-  <div v-if="functions=='edit'">
-    <!-- editIncidence -->
-    <div v-if="incidence.pieces">
       <table>
         <tr>
-            <th colspan="2">Piezas afectadas</th>
+            <th colspan="2">Piezas afectadas:</th>
         </tr>
       </table>
       <table>
@@ -37,7 +34,21 @@
           <td>{{piece.name}}</td>
         </tr>
       </table>
-    </div><br />
+    <table>
+        <tr v-for="(selectedPiece, index) in selectedPieces" v-bind:key="index">
+          <td v-text="selectedPiece"/>
+        </tr>
+        <tr>
+          <td>
+              <select v-model="selectedPiece" name="pieza">
+                <option value="Selecciona una pieza">Selecciona una pieza</option>
+                <option v-for="(piece, index) in pieces" v-bind:key="index">{{ piece.name }}</option>
+              </select> <button @click="addPiece()">Añadir</button>
+          </td>
+        </tr>
+    </table><br />
+  <div v-if="functions=='edit'">
+    <!-- editIncidence -->
     <table>
       <tr>
         <th>Funciones</th>
@@ -68,24 +79,6 @@
               </tr>
       </table><br />
     </div>
-    <table>
-        <tr v-if="pieces">
-          <th>Lista de piezas:</th>
-        </tr>
-    </table>
-    <table>
-        <tr v-for="(selectedPiece, index) in selectedPieces" v-bind:key="index">
-          <td v-text="selectedPiece"/>
-        </tr>
-        <tr>
-          <td>
-              <select v-model="selectedPiece" name="pieza" :multiple="false">
-                <option value="--">--</option>
-                <option v-for="(piece, index) in pieces" v-bind:key="index">{{ piece.name }}</option>
-              </select> <button @click="addPiece()">Añadir</button> <button v-if="selectedPieces.length>0" @click="selectedPieces = []">Reiniciar</button>
-            </td>
-        </tr>
-    </table><br />
     <table>
       <tr>
         <th>Nota</th>
@@ -121,27 +114,6 @@
   </div>
   <div v-else-if="functions=='modify'">
   <!-- modifyIncidence -->
-    <table>
-      <tr>
-        <th>Piezas afectadas:</th>
-      </tr>
-    </table>
-    <table>
-      <tr v-for="(piece, index) in incidence.pieces" v-bind:key="index">
-        <td>{{piece.name}}</td>
-      </tr>
-      <tr v-if="checkPiece">
-        <td>
-            <select name="pieza" v-model="selectedPiece">
-              <option value="Selecciona una pieza" selected="selected">Selecciona una pieza</option>
-              <option v-for="(piece, index) in pieces" v-bind:key="index">{{piece.name}}</option>
-            </select> <button @click="addPiecePlus()">Añadir</button> <a href="#" @click="checkPiece = false">Reiniciar</a>
-        </td>
-      </tr>
-      <tr v-if="!checkPiece">
-        <a href="#" @click="addOnPiece()">Añadir</a>
-      </tr>
-    </table><br />
     <div v-if="incidence.notes">
       <table v-if="functions=='modify'">
         <tr>
@@ -216,25 +188,11 @@ export default {
     {
       this.$emit('stepBack');
     },
-    addPiece: function()
-    {
-      if (!this.selectedPieces.includes(this.selectedPiece)) {
-        this.selectedPieces.push(this.selectedPiece);
-        let piece = this.pieces.filter(data =>{
-          return data.name == this.selectedPiece;
-        })[0];
-        this.PieceIdsSelected.push(piece.id);
-      }
-    },
     addOn: function()
     {
       this.addNote = true;
     },
-    addOnPiece: function()
-    {
-      this.checkPiece = true;
-    },
-    addPiecePlus: function()
+    addPiece: function()
     {
       let piece = this.pieces.filter(data =>{
         return data.name == this.selectedPiece;
@@ -314,20 +272,11 @@ export default {
   },
   mounted(){
     this.issueDesc = this.incidence.issueDesc;
-    if (this.functions=='attend') {
-      axios.get("http://localhost:8082/newMenu.php?funcion=getPiecesList")
-      .then( data => {
-        this.pieces = data.data;
-      });
-    }
-    else if (this.functions=='modify')
-    {
-      axios.get("http://localhost:8082/newMenu.php?funcion=getPiecesList")
-      .then( data => {
-        this.pieces = data.data;
-        this.piecesData = this.incidence.pieces;
-      });
-    }
+    axios.get("http://localhost:8082/newMenu.php?funcion=getPiecesList")
+    .then( data => {
+      this.pieces = data.data;
+      this.piecesData = this.incidence.pieces;
+    });
   }
 }
 </script>
