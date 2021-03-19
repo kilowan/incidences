@@ -89,31 +89,31 @@
   <div v-else-if="menu=='edit' && incidence">
     <incidence-module
     :user="user"
-    :incidence="incidence"
+    :incidence="incidenceData"
     :functions="'edit'"
     @reload="reload()"
     @reloadoff="reloadoff()"
-    @stepBack="menu='main'"/>
+    @stepBack="stepBack()"/>
   </div>
   <div v-else-if="menu=='modify' && incidence">
     <incidence-module
     v-if="incidence.owner"
     :user="user" 
-    :incidence="incidence"
+    :incidence="incidenceData"
     :functions="'modify'"
     @reload="reload()"
     @reloadoff="reloadoff()"
-    @stepBack="menu='main'"/>
+    @stepBack="stepBack()"/>
   </div>
   <div v-else>
     <incidence-module
     v-if="checkIncidence()"
     :user="user" 
-    :incidence="incidence"
+    :incidence="incidenceData"
     :functions="'attend'"
     @reload="reload()"
     @reloadoff="reloadoff()"
-    @stepBack="menu='main'"/>
+    @stepBack="stepBack()"/>
   </div>
 </template>
 
@@ -132,6 +132,7 @@ export default {
   {
     return {
       menu: 'main',
+      incidenceData: [],
     }
   },
   methods: {
@@ -139,9 +140,23 @@ export default {
     {
       this.$emit('stepBack');
     },
+    stepBack: function()
+    {
+      this.load();
+      this.menu = 'main';
+    },
     check: function()
     {
       return Object.keys(this.incidences).length >0;
+    },
+    load: function()
+    {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8082/newMenu.php?funcion=getIncidenceById&id_part=' + this.incidence.id,
+      }).then(data => {
+        this.incidenceData = data.data;
+      });
     },
     checkIncidence: function()
     {
@@ -190,7 +205,9 @@ export default {
       this.manu='main';
     }
   },
-  mounted(){}
+  mounted(){
+    this.load();
+  }
 }
 </script>
 <style></style>

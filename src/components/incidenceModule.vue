@@ -24,29 +24,7 @@
         <td>{{incidence.initDateTime}}</td>
       </tr>
   </table><br />
-      <table>
-        <tr>
-            <th colspan="2">Piezas afectadas:</th>
-        </tr>
-      </table>
-      <table>
-        <tr v-for="(piece, index) in incidence.pieces" v-bind:key="index">
-          <td>{{piece.name}}</td>
-        </tr>
-      </table>
-    <table>
-        <tr v-for="(selectedPiece, index) in selectedPieces" v-bind:key="index">
-          <td v-text="selectedPiece"/>
-        </tr>
-        <tr>
-          <td>
-              <select v-model="selectedPiece" name="pieza">
-                <option value="Selecciona una pieza">Selecciona una pieza</option>
-                <option v-for="(piece, index) in pieces" v-bind:key="index">{{ piece.name }}</option>
-              </select> <button @click="addPiece()">Añadir</button>
-          </td>
-        </tr>
-    </table><br />
+      <pieces-module :pieces="incidence.pieces" @add="PieceIdsSelected.push($event)"/>
   <div v-if="functions=='edit'">
     <!-- editIncidence -->
     <table>
@@ -61,44 +39,8 @@
     </table>
   </div>
   <div v-else-if="functions=='attend'">
+    <notes-module :notes="incidence.notes" @add="note = $event"/>
     <!-- attendIncidence -->
-    <div v-if="incidence.notes">
-      <table>
-          <tr>
-              <th colspan="2">Notas del ténico</th>
-          </tr>
-      </table><br />
-      <table>
-          <tr>
-              <th>Nota</th>
-              <th>Fecha</th>
-          </tr>
-              <tr v-for="(note, index) in incidence.notes" v-bind:key="index">
-                  <td>{{note.noteStr}}</td>
-                  <td>{{note.date}}</td>
-              </tr>
-      </table><br />
-    </div>
-    <table>
-      <tr>
-        <th>Nota</th>
-      </tr>
-    </table>
-    <table>
-        <tr>
-            <td>Nueva nota</td>
-            <td><input type="text" v-model="note" /></td>
-        </tr>
-        <tr>
-            <td>Función</td>
-            <td>
-                <select v-model="selected">
-                    <option value="insertparte">Actualizar parte</option>
-                    <option value="cierraparte">Cerrar parte</option>
-                </select>
-            </td>
-        </tr>
-    </table><br />
     <table>
       <tr>
         <th>Funciones</th>
@@ -114,24 +56,7 @@
   </div>
   <div v-else-if="functions=='modify'">
   <!-- modifyIncidence -->
-    <div v-if="incidence.notes">
-      <table v-if="functions=='modify'">
-        <tr>
-          <th colspan="2">Notas</th>
-        </tr>
-        <tr v-for="(note, index) in incidence.notes" v-bind:key="index">
-          <td>{{note.noteStr}}</td>
-        </tr>
-        <tr v-if="addNote">
-          <td>
-            <input type="text" v-model="note" /> <a href="#" @click="addNote = false">Reiniciar</a>
-          </td>
-        </tr>
-        <tr v-if="!addNote">
-          <a href="#" @click="addOn()">Añadir</a>
-        </tr>
-      </table><br />
-    </div>
+    <notes-module :notes="incidence.notes" @add="note = $event"/>
     <table>
       <tr>
         <th>Funciones</th>
@@ -160,11 +85,15 @@
 <script>
 
 import axios from 'axios';
+import notesModule from './NotesModule.vue';
+import piecesModule from './piecesModule.vue';
 
 export default {
   name: 'incidenceModule',
   props: ['incidence', 'user', 'functions'],
   components: {
+    notesModule,
+    piecesModule,
   },
   data:function()
   {
@@ -177,37 +106,22 @@ export default {
       note: undefined,
       close: false,
       PieceIdsSelected: [],
-      funcion: undefined,
       piecesData: undefined,
-      addNote: false,
-      checkPiece: false,
     }
+  },
+  mounted: function()
+  {
+    this.issueDesc = this.incidence.issueDesc;
+    axios.get("http://localhost:8082/newMenu.php?funcion=getPiecesList")
+    .then( data => {
+      this.pieces = data.data;
+      this.piecesData = this.incidence.pieces;
+    });
   },
   methods: {
     back: function()
     {
       this.$emit('stepBack');
-    },
-    addOn: function()
-    {
-      this.addNote = true;
-    },
-    addPiece: function()
-    {
-      let piece = this.pieces.filter(data =>{
-        return data.name == this.selectedPiece;
-      })[0];
-      
-      let boolean = false;
-      this.piecesData.forEach(element => {
-        if (element.id == piece.id) {
-          boolean = true;
-        }
-      });
-      if (!boolean) {
-        this.piecesData.push(piece);
-        this.PieceIdsSelected.push(piece.id);
-      }
     },
       modifyIncidence: function()
       {
@@ -270,14 +184,6 @@ export default {
       }
     },
   },
-  mounted(){
-    this.issueDesc = this.incidence.issueDesc;
-    axios.get("http://localhost:8082/newMenu.php?funcion=getPiecesList")
-    .then( data => {
-      this.pieces = data.data;
-      this.piecesData = this.incidence.pieces;
-    });
-  }
 }
 </script>
 <style></style>
