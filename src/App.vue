@@ -36,6 +36,7 @@
       :reload="reload"
       :incidences="incidences"
       @linked="reload=false"
+      @reload="reloading()"
       />
     </div>
     <div v-else class="cuerpo">

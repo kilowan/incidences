@@ -50,7 +50,8 @@
       :user="user"
       :admin="admin"
       :title="'Partes nuevos'"
-      @linked="linked($event)"/>
+      @linked="linked($event)"
+      @reload="reloading()"/>
 
       <!-- attended -->
       <incidences-view v-if="attendedIncidences && tab=='current'"
@@ -58,7 +59,8 @@
       :user="user"
       :admin="admin"
       :title="'Partes atendidos'"
-      @linked="linked($event)"/>
+      @linked="linked($event)"
+      @reload="reloading()"/>
 
       <!-- closed -->
       <incidences-view v-if="closedIncidences && tab=='old'"
@@ -66,7 +68,8 @@
       :user="user"
       :admin="admin"
       :title="'Partes cerrados'"
-      @linked="linked($event)"/>
+      @linked="linked($event)"
+      @reload="reloading()"/>
     </div>
   </div>
   <div v-else>
