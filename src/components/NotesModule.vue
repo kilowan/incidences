@@ -4,7 +4,8 @@
       <th colspan="2">Notas</th>
     </tr>
     <tr v-for="(note, index) in notesData" v-bind:key="index">
-      <td>{{ note.noteStr }}</td>
+      <td v-if="note.noteStr != ''">{{ note.noteStr }}</td>
+      <td v-else> "Sin texto" </td>
     </tr>
     <tr v-if="addNote && !added">
       <td>
