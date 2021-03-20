@@ -8,45 +8,73 @@
   <table>
       <tr>
         <td>Nombre del empleado</td>
-        <td>{{incidence.owner.name}} {{incidence.owner.surname1}} {{incidence.owner.surname2}}</td>
+        <td v-if="owner">{{owner.name}} {{owner.surname1}} {{owner.surname2}}</td>
       </tr>
       <tr>
         <td>Información</td>
-        <td v-if="functions=='edit'"><input type="text" name="issueDesc" v-model="issueDesc" required /></td>
+        <td v-if="incidence.state == 1 && user.permissions.includes('6') && owner.id == user.id"><input type="text" name="issueDesc" v-model="issueDesc" required /></td>
         <td v-else>{{ incidence.issueDesc }}</td>
       </tr>
-      <tr v-if="incidence.solver.id">
+      <tr v-if="solver.name">
         <td >Tecnico a cargo</td>
-        <td>{{ incidence.solver.name }} {{ incidence.solver.surname1 }} {{ incidence.solver.surname2 }}</td>
+        <td>{{ incidence.solver.name }} {{ solver.surname1 }} {{ solver.surname2 }}</td>
       </tr>
       <tr>
         <td>Fecha de creación</td>
         <td>{{incidence.initDateTime}}</td>
       </tr>
+      <tr v-if="incidence.state == 1 && user.permissions.includes('6') && owner.id == user.id">
+        <td>
+            <a href="#" @click="deleteIncidence()">Borrar</a>
+        </td>
+        <td>
+            <a href="#" @click="edit=true">Editar</a>
+        </td>
+      </tr>
+      <tr v-else-if="incidence.state == 1 && (user.permissions.includes('3') || user.permissions.includes('10')) && owner.id != user.id">
+        <td colspan="2">
+            <a href="#" @click="edit=true">Atender</a>
+        </td>
+      </tr>
+      <tr v-else-if="incidence.state == 2 && (user.permissions.includes('5') || user.permissions.includes('11')) && owner.id != user.id">
+        <td colspan="2">
+            <a href="#" @click="edit=true">Modificar</a>
+        </td>
+      </tr>
+      <tr v-else-if="incidence.state == 3 && user.permissions.includes('22')">
+        <td colspan="2">
+            <a href="#" @click="hide()">Ocultar</a>
+        </td>
+      </tr>
+      <tr v-else-if="incidence.state == 4 && user.permissions.includes('9')">
+        <td colspan="2">
+            <a href="#" @click="show()">Mostrar</a>
+        </td>
+      </tr>
   </table><br />
-      <pieces-module :pieces="incidence.pieces" @add="PieceIdsSelected.push($event)"/>
-  <div v-if="functions=='edit'">
+      <pieces-module v-if="incidence.pieces" :edit="edit" :pieces="incidence.pieces" @add="PieceIdsSelected.push($event)"/>
+  <div v-if="incidence.state == 1 && user.permissions.includes('6') && owner.id == user.id">
     <!-- editIncidence -->
-    <table>
+    <table v-if="edit">
       <tr>
         <th>Funciones</th>
       </tr>
     </table>
-    <table>
+    <table v-if="edit">
       <tr>
-        <td colspan="2" v-if="issueDesc"><a href="#" @click="editIncidence()">Guardar</a></td>
+        <td colspan="2" v-if="issueDesc && edit"><a href="#" @click="editIncidence()">Guardar</a></td>
       </tr>
     </table>
   </div>
-  <div v-else-if="functions=='attend'">
-    <notes-module :notes="incidence.notes" @add="note = $event"/>
+  <div v-else-if="incidence.state == 1 && (user.permissions.includes('3') || user.permissions.includes('10')) && owner.id != user.id">
+    <notes-module v-if="incidence.notes" :edit="edit" :notes="incidence.notes" @add="note = $event"/>
     <!-- attendIncidence -->
-    <table>
+    <table v-if="edit">
       <tr>
         <th>Funciones</th>
       </tr>
     </table>
-    <table>
+    <table v-if="edit">
       <tr>
           <td>
               <a href="#" @click="attendIncidence()">Guardar</a>
@@ -54,15 +82,15 @@
       </tr>
     </table>
   </div>
-  <div v-else-if="functions=='modify'">
+  <div v-else-if="incidence.state == 2 && (user.permissions.includes('5') || user.permissions.includes('11')) && owner.id != user.id">
   <!-- modifyIncidence -->
-    <notes-module :notes="incidence.notes" @add="note = $event"/>
-    <table>
+    <notes-module :edit="edit" :notes="incidence.notes" @add="note = $event"/>
+    <table v-if="edit">
       <tr>
         <th>Funciones</th>
       </tr>
     </table>
-    <table>
+    <table v-if="edit">
         <tr>
           <td>Función</td>
           <td>
@@ -85,12 +113,12 @@
 <script>
 
 import axios from 'axios';
-import notesModule from './NotesModule.vue';
+import notesModule from './notesModule.vue';
 import piecesModule from './piecesModule.vue';
 
 export default {
   name: 'incidenceModule',
-  props: ['incidence', 'user', 'functions'],
+  props: ['incidence', 'user'],
   components: {
     notesModule,
     piecesModule,
@@ -107,11 +135,16 @@ export default {
       close: false,
       PieceIdsSelected: [],
       piecesData: undefined,
+      edit: false,
+      owner: undefined,
+      solver: undefined,
     }
   },
   mounted: function()
   {
     this.issueDesc = this.incidence.issueDesc;
+    this.owner = this.incidence.owner;
+    this.solver = this.incidence.solver;
     axios.get("http://localhost:8082/newMenu.php?funcion=getPiecesList")
     .then( data => {
       this.pieces = data.data;
@@ -122,6 +155,26 @@ export default {
     back: function()
     {
       this.$emit('stepBack');
+    },
+    hide: function()
+    {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8082/newMenu.php?funcion=hideIncidence&incidenceId=' + this.incidence.id + '&userId=' + this.user.id,
+      }).then(data => {
+        this.$emit('reload', data);
+        //this.hiddenOwnIncidences = data.data;
+      });
+    },
+    show: function()
+    {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8082/newMenu.php?funcion=showIncidence&incidenceId=' + this.incidence.id + '&userId=' + this.user.id,
+      }).then(data => {
+        this.$emit('reload', data);
+        //this.hiddenOwnIncidences = data.data;
+      });
     },
       modifyIncidence: function()
       {
@@ -182,6 +235,15 @@ export default {
       } else {
         this.$emit('reloadoff');
       }
+    },
+    deleteIncidence: function()
+    {
+      axios({
+          method: 'get',
+          url: 'http://localhost:8082/newMenu.php?funcion=deleteIncidence&incidenceId=' + this.incidence.id + '&userId=' + this.user.id,
+        }).then(
+          this.$emit('reload')
+        );
     },
   },
 }

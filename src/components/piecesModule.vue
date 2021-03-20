@@ -9,7 +9,7 @@
           <td v-text="piece.name"></td>
         </tr>
       </table>
-    <table>
+    <table v-if="edit">
         <tr>
           <td>
               <select v-model="selectedPiece" name="pieza">
@@ -27,7 +27,7 @@ import axios from 'axios';
 
 export default {
   name: 'piecesModule',
-  props: ['pieces'],
+  props: ['pieces', 'edit'],
   components: {
   },
   data:function()

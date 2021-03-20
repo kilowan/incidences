@@ -11,7 +11,7 @@
         <input type="text" v-model="note" /> <a href="#" @click="addNotes()">Añadir</a>
       </td>
     </tr>
-    <tr v-if="!addNote && !added">
+    <tr v-if="!addNote && !added && edit">
       <a href="#" @click="addOn()">Añadir</a>
     </tr>
   </table><br />
@@ -21,7 +21,7 @@
 
 export default {
   name: 'notesModule',
-  props: ['notes'],
+  props: ['notes', 'edit'],
   components: {
   },
   data:function()
