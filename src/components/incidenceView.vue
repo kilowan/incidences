@@ -79,7 +79,7 @@
         <table v-if="edit">
           <tr>
               <td>
-                  <a href="#" @click="attendIncidence()">Guardar</a>
+                  <a href="#" @click="modifyIncidence()">Guardar</a>
               </td>
           </tr>
         </table>
@@ -128,10 +128,8 @@ export default {
   {
     return {
       menu: 'main',
-      incidenceData: [],
       issueDesc: undefined,
       selected: undefined,
-      pieces: undefined,
       note: undefined,
       edit: false,
       PieceIdsSelected: [],
@@ -146,11 +144,7 @@ export default {
     stepBack: function()
     {
       this.load();
-      this.$emit('stepBack');
-    },
-    check: function()
-    {
-      return Object.keys(this.incidences).length >0;
+      this.back();
     },
     load: function()
     {
@@ -158,13 +152,8 @@ export default {
         method: 'get',
         url: 'http://localhost:8082/newMenu.php?funcion=getIncidenceById&id_part=' + this.incidence.id,
       }).then(data => {
-        this.incidenceData = data.data;
         this.issueDesc = data.data.issueDesc;
       });
-    },
-    checkIncidence: function()
-    {
-      return this.incidence.owner ? true : false;
     },
     hide: function()
     {
@@ -173,7 +162,6 @@ export default {
         url: 'http://localhost:8082/newMenu.php?funcion=hideIncidence&incidenceId=' + this.incidence.id + '&userId=' + this.user.id,
       }).then(data => {
         this.$emit('reload', data);
-        //this.hiddenOwnIncidences = data.data;
       });
     },
     show: function()
@@ -183,12 +171,7 @@ export default {
         url: 'http://localhost:8082/newMenu.php?funcion=showIncidence&incidenceId=' + this.incidence.id + '&userId=' + this.user.id,
       }).then(data => {
         this.$emit('reload', data);
-        //this.hiddenOwnIncidences = data.data;
       });
-    },
-    change(mod)
-    {
-      this.menu = mod;
     },
     deleteIncidence: function()
     {
@@ -227,27 +210,6 @@ export default {
       } else {
         this.$emit('reloadoff');
       }
-    },
-    attendIncidence: function()
-    {
-      if (this.selected == 'cierraparte') {
-        this.close = true;
-      }
-        axios({
-          method: 'post',
-          url: 'http://localhost:8082/newMenu.php',
-          data: {
-            funcion: 'updateIncidence',
-            incidenceId: this.incidence.id,
-            userId: this.user.id,
-            note: this.note,
-            pieces: this.PieceIdsSelected,
-            close: this.close,
-          },
-          headers: [],
-        }).then(
-          this.$emit('reload')
-        );
     },
       modifyIncidence: function()
       {
