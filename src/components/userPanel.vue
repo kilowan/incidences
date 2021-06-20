@@ -1,6 +1,6 @@
 <template>
   <!-- userInfo -->
-  <user-info :user="user"/>
+  <user-info :userData="user"/>
   <!-- incidences -->
   <incidences :user="user" :incidences="incidences" :admin="true"/>
   <!-- userInfo -->

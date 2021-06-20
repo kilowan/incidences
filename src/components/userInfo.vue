@@ -1,5 +1,5 @@
 <template>
-  <div v-if="userDni && user">
+  <div v-if="user">
     <!-- userInfo -->
     <br /><table>
       <tr>
@@ -48,7 +48,7 @@ import axios from 'axios';
 
 export default {
   name: 'userInfo',
-  props: ['userDni'],
+  props: ['username', 'userData'],
   components: {
   },
   data:function()
@@ -109,7 +109,7 @@ export default {
           url: 'http://localhost:8082/newMenu.php',
           data: {
             funcion: 'updateWorker',
-            dni: this.user.dni,
+            dni: this.user.dni? this.user.dni: this.userData.dni,
             fields: this.fields,
             values: this.values,
           },
@@ -120,7 +120,9 @@ export default {
       }
       this.$emit('reloadUser', this.user.dni);
       this.reset();
-      this.reloadUser();
+      if (!this.userData) {
+        this.reloadUser();
+      }
     },
     reset: function()
     {
@@ -135,17 +137,21 @@ export default {
     },
     reloadUser: function()
     {
-      axios.get("http://localhost:8082/newMenu.php?funcion=getEmployeeByUsername&username="+ this.userDni)
+      axios.get("http://localhost:8082/newMenu.php?funcion=getEmployeeByUsername&username="+ this.username)
       .then( datas => {
         this.user = datas.data;
       });
     },
   },
   mounted(){
-    axios.get("http://localhost:8082/newMenu.php?funcion=getEmployeeByUsername&username="+ this.userDni)
-    .then( datas => {
-      this.user = datas.data;
-    });
+    if (!this.userData) {
+      axios.get("http://localhost:8082/newMenu.php?funcion=getEmployeeByUsername&username="+ this.username)
+      .then( datas => {
+        this.user = datas.data;
+      });
+    } else {
+      this.user = this.userData;
+    }
   }
 }
 </script>

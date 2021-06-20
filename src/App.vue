@@ -21,7 +21,7 @@
       <make-incidence v-if="user" :user="user" @closeForm="mod='Main'" class="mensaje"/>
     </div>
     <div v-else-if="check('user_info')" class="cuerpo">
-      <user-info  v-if="user" :userDni="user.dni" @reloadUser="reloadUser($event)"/>
+      <user-info  v-if="user" :username="username" @reloadUser="reloadUser($event)"/>
     </div>
     <div v-else-if="check('statistics')" class="cuerpo">
       <statistics  v-if="user" :user="user"/>
@@ -97,6 +97,7 @@ export default {
       axios.get("http://localhost:8082/newMenu.php?funcion=getEmployeeByUsername&username="+ data.username)
       .then( datas => {
         this.user = datas.data;
+        this.username = data.username;
         this.page = 'Menu';
         axios.get("http://localhost:8082/newMenu.php?funcion=getAllincidences")
         .then( datas => {
