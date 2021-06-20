@@ -84,28 +84,20 @@ export default {
     {
       return field && field != field2? true: false
     },
+    pushField(data, parity, name)
+    {
+      if(this.checkField(data, parity))
+      {
+        this.values.push(data);
+        this.fields.push(name);
+      }
+    },
     fillData(data)
     {
-      if(this.checkField(data[0], this.user.name))
-      {
-        this.values.push(data[0]);
-        this.fields.push("nombre");
-      }
-      if(this.checkField(data[1], this.user.surname1))
-      {
-        this.values.push(data[1]);
-        this.fields.push("apellido1");
-      }
-      if(this.checkField(data[2], this.user.surname2))
-      {
-        this.values.push(data[2]);
-        this.fields.push("apellido2");
-      }
-      if(this.checkField(data[3], this.user.tipo))
-      {
-        this.values.push(data[3]);
-        this.fields.push("tipo");
-      }
+      this.pushField(data[0], this.user.name, "nombre");
+      this.pushField(data[1], this.user.surname1, "apellido1");
+      this.pushField(data[2], this.user.surname2, "apellido2");
+      this.pushField(data[3], this.user.tipo, "tipo");
     },
   },
   mounted(){
