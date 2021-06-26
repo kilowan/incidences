@@ -2,12 +2,12 @@
   <!-- own incidences -->
   <br /><div v-if="!incidence">
     <table>
-      <tr>
-        <th v-if="newOwnIncidences.length >0 || newIncidences.length >0"><a href="#"  @click="selectTab('new')">Nuevos</a></th>
-        <th v-if="attendedOwnIncidences.length >0 || attendedIncidences.length >0"><a href="#"  @click="selectTab('current')">Atendidos</a></th>
-        <th v-if="closedOwnIncidences.length >0 || closedIncidences.length >0"><a href="#" @click="selectTab('old')">Cerrados</a></th>
-        <th v-if="hiddenOwnIncidences.length >0"><a href="#" @click="selectTab('hidden')">Ocultos</a></th>
-      </tr>
+      <row 
+        v-if="infoData"
+        :data="infoData"
+        :header="true"
+         @select-tab="selectTab($event)"
+      />
     </table><br />
     <div v-if="checkPermissions(user.permissions, ['6', '7', '8', '9'])">
       <!-- new -->
@@ -87,13 +87,15 @@
 
 import incidencesView from './incidencesView.vue';
 import incidenceView from './incidenceView.vue';
+import row from '../custom/row.vue';
 
 export default {
   name: 'incidences',
   props: ['user', 'incidences', 'admin', 'reload'],
   components: {
     incidencesView,
-    incidenceView
+    incidenceView,
+    row,
   },
   data:function()
   {
@@ -107,6 +109,7 @@ export default {
       newIncidences: [],
       incidence: undefined,
       tab: 'new',
+      infoData: undefined,
     }
   },
   methods: {
@@ -174,6 +177,42 @@ export default {
         });
         this.closedIncidences = this.incidences.filter(data => {
           return data.solver.dni == this.user.dni && data.state == 3;
+        });
+      }
+      this.infoData = [
+        {
+          arrayData: {
+            own: this.newOwnIncidences,
+            other: this.newIncidences,
+          },
+          inName: 'Nuevos',
+          outName: 'new',
+        },
+        {
+          arrayData: {
+            own: this.attendedOwnIncidences,
+            other: this.attendedIncidences,
+          },
+          inName: 'Atendidos',
+          outName: 'current',
+        },
+        {
+          arrayData: {
+            own: this.closedOwnIncidences,
+            other: this.closedIncidences,
+          },
+          inName: 'Cerrados',
+          outName: 'old',
+        },
+      ];
+      if (this.hiddenOwnIncidences.length>0) {
+        this.infoData.push({
+          arrayData: {
+            own: this.hiddenOwnIncidences,
+            other: [],
+          },
+          inName: 'Ocultos',
+          outName: 'hidden',
         });
       }
     },
