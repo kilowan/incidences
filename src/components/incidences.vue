@@ -181,36 +181,24 @@ export default {
       }
       this.infoData = [
         {
-          arrayData: {
-            own: this.newOwnIncidences,
-            other: this.newIncidences,
-          },
+          hasData: this.newOwnIncidences.length>0 || this.newIncidences.length>0? true: false,
           inName: 'Nuevos',
           outName: 'new',
         },
         {
-          arrayData: {
-            own: this.attendedOwnIncidences,
-            other: this.attendedIncidences,
-          },
+          hasData: this.attendedOwnIncidences.length>0 || this.attendedIncidences.length>0? true: false,
           inName: 'Atendidos',
           outName: 'current',
         },
         {
-          arrayData: {
-            own: this.closedOwnIncidences,
-            other: this.closedIncidences,
-          },
+          hasData: this.closedOwnIncidences.length>0 || this.closedIncidences.length>0? true: false,
           inName: 'Cerrados',
           outName: 'old',
         },
       ];
       if (this.hiddenOwnIncidences.length>0) {
         this.infoData.push({
-          arrayData: {
-            own: this.hiddenOwnIncidences,
-            other: [],
-          },
+          hasData: this.hiddenOwnIncidences.length>0? true: false,
           inName: 'Ocultos',
           outName: 'hidden',
         });

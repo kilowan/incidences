@@ -3,7 +3,7 @@
     <cell
       v-for="(info, index) in data" v-bind:key="index"
       :header="header" 
-      :link="info.arrayData.own.length >0 || info.arrayData.other.length >0" 
+      :link="info.hasData" 
       :text="info.inName" 
       @select-tab="$emit('selectTab', info.outName)"
   />
