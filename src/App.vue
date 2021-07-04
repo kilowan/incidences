@@ -94,7 +94,7 @@ export default {
     },
     logedIn: function(data)
     {
-      axios.get("http://localhost:8082/newMenu.php?funcion=getEmployeeByUsername&username="+ data.username)
+      axios.get("http://localhost:8082/employee.php?funcion=getEmployeeByUsername&username="+ data.username)
       .then( datas => {
         this.user = datas.data;
         this.username = data.username;
@@ -108,7 +108,7 @@ export default {
     },
     reloadUser: function(data)
     {
-      axios.get("http://localhost:8082/newMenu.php?funcion=getEmployeeByUsername&username="+ data)
+      axios.get("http://localhost:8082/employee.php?funcion=getEmployeeByUsername&username="+ data)
       .then( datas => {
         this.user = datas.data;
       });

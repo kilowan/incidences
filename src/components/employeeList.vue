@@ -97,7 +97,7 @@ export default {
     {
       axios({
       method: 'get',
-      url: 'http://localhost:8082/newMenu.php?funcion=removeEmployee&id=' + id,
+      url: 'http://localhost:8082/employee.php?funcion=removeEmployee&id=' + id,
       })
       .then(
         this.load()
@@ -107,7 +107,7 @@ export default {
     {
       axios({
       method: 'get',
-      url: 'http://localhost:8082/newMenu.php?funcion=getEmpolyeeList',
+      url: 'http://localhost:8082/employee.php?funcion=getEmpolyeeList',
       })
       .then(data =>
         this.employees = data.data
